@@ -14,20 +14,26 @@
 
  - `Ctrl+Alt+Space`:智能提示代码
 
- - `alt + insert`  快速实现父类的构造方法
+ - `alt + insert`  快速实现父类的构造方法(getter,setter,equals,hashCode,toString等)
 
  - `Alt+Shift+P`:实现接口方法
 
  - `Ctrl+delete`(或`Ctrl+Backspace`) 快速删除当前单词
 
  - `Ctrl+Q`  快速返回刚才编辑的地方
+ - `Ctrl+O`  重写父类的方法(还可以跳转到某个方法所在行)
  
  - `Shit+Alt+M` 提取方法
 
  - `Ctrl+Alt+V` 提取局部变量
+
+ - `shift+F10`  快速运行项目
+
 # 2.Logcat使用
 
 >打开 `LogCat`在搜索框右侧的`No Filters`中选择 `Edit Filter Configuration`选项,然后在`Name`中输入过滤器的名称，在`by Package Name`中输入你的应用的`Package Name`就可以了。然后在搜索框右侧的过滤器选项中选择你刚选择过滤器就可以了。
+
+- logi 自动补全一条完整的打印语句(还有logd等)
 
 # 3.快速生成构造函数,Setter,Getter,ToString()方法
 

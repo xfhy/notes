@@ -5,7 +5,7 @@
 #1.安卓四大组件:Activity  广播接收者(BroadCastReceiver)   服务(Service)  内容提供者(ContentProvider)
 >都需要在清单文件中配置
 #2.Intent
-```java
+
 		1.传递数据putExtra("name",name);   在另一个Activity读取数据:Intent intent = getIntent();
 			String name = intent.getStringExtra("name");
 			String sex = intent.getStringExtra("sex");
@@ -19,15 +19,41 @@
 				setResult(10, intent);
 				//关闭当前页面  
 				finish();
-```
+
 #3.Activity的生命周期 (必须掌握)
-- onCreate() 方法 当Activity第一次启动的时候调用
-- onDestroy() 方法 当Activity销毁的时候调用
-- onStart() 方法 当Activity变成可见的时候调用 
-- onStop() 方法 当activity 不可见的时候调用
-- onResume()方法 当activity可以获取焦点的时候  当界面的按钮可以被点击了
-- onPause()方法 当失去焦点的时候调用 当按钮不了可以被点击的时候调用
-- onRestart()当界面重新启动的时候调用   调完这个方法接着调用onStart()方法
+
+  Activity类中定义了七个回调方法，覆盖了活动生命周期的每一个环节，下面我来一一介绍下这七个方法。
+
+### 1.onCreate()
+
+这个方法你已经看到过很多次了，每个活动中我们都重写了这个方法，它会在活动第一次被创建的时候调用。你应该在这个方法中完成活动的初始化操作，比如说加载布局、绑定事件等。
+
+### 2.onStart()
+
+这个方法在活动由不可见变为可见的时候调用。
+
+### 3.onResume()
+
+这个方法在活动准备好和用户进行交互的时候调用。此时的活动一定位于返回栈的栈顶，并且处于运行状态。
+
+### 4.onPause()
+
+这个方法在系统准备去启动或者恢复另一个活动的时候调用。我们通常会在这个方法中将一些消耗CPU的资源释放掉，以及保存一些关键数据，但这个方法的执行速度一定要快，不然会影响到新的栈顶活动的使用。
+
+### 5.onStop()
+
+这个方法在活动完全不可见的时候调用。它和onPause()方法的主要区别在于，如果启动的新活动是一个对话框式的活动，那么onPause()方法会得到执行，而onStop()方法并不会执行。
+
+### 6.onDestroy()
+
+这个方法在活动被销毁之前调用，之后活动的状态将变为销毁状态。
+
+### 7.onRestart()
+
+这个方法在活动由停止状态变为运行状态之前调用，也就是活动被重新启动了。
+
+以上七个方法中除了onRestart()方法，其他都是两两相对的，从而又可以将活动分为三种生存期。
+![生命周期图](http://images2015.cnblogs.com/blog/15207/201512/15207-20151230134402026-2097191680.jpg)
 
 		当横竖屏切换的时候会重新创建Activity界面(onCreate()->onStart()->OnResume())
 		在android配置文件中当前Activity的里面写入如下:
@@ -84,6 +110,7 @@
 						activity.finish();
 					}
 				}
+				activities.clear();
 			}
 		}
 		接下来修改BaseActivity中的代码,onCreate()方法中加入ActivityCollector.addActivity(this);在onDestroy()中加入
@@ -97,3 +124,11 @@
 			context.startActivity(intent);
 		}
 		使用方法:SecondActivity.actionStart(FirstActvity.this,"data1","data2");
+
+
+# 7. 保存临时数据(onSaveInstanceState()方法)
+
+Activity中还提供了一个onSaveInstanceState()回调方法.这个方法可以保证在活动被回收之前一定会被调用,因此我们可以通过这个方法来
+解决活动被回收时临时数据得不到保存的问题.然后在onCreate()中通过Bundle对象来取数据,注意判断是否为null.
+
+# 8. 
