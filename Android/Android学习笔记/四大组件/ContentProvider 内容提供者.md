@@ -52,7 +52,7 @@ ContentProvider则在其他的应用程序也可以根据标准来进行第一�
 		        }
 
 # 3. 读取联系人案例
->QQ ,微信,默默等
+>QQ ,微信,陌陌等
 
 1. data表    data1列表里存的是所有联系人的所有信息(包含姓名,地址,邮箱等)    
     raw_contact_id 列是用来区分一共有几条联系人信息
@@ -64,6 +64,85 @@ ContentProvider则在其他的应用程序也可以根据标准来进行第一�
 1. 先查询raw_contacts表的contact_id列,就知道有几条联系人
 2. 我根据contact_id去查询data表,查询data1列和mimetype列
 3. view_data是由data表和mimetype表的组合
+
+**Android 第一行代码  书中示例**
+
+		ArrayAdapter<String> adapter;
+	    List<String> contactList = new ArrayList<>();
+	
+	    @Override
+	    protected void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        setContentView(R.layout.activity_main);
+	
+	        ListView lv_contact = (ListView) findViewById(R.id.lv_contact);
+	
+	        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contactList);
+	        lv_contact.setAdapter(adapter);
+	
+	        //检查用户是否已经授权了读取联系人的权限     如果相等则授权了
+	        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+	                != PackageManager.PERMISSION_GRANTED) {
+	            //不相等   则申请权限
+	            ActivityCompat.requestPermissions(this,
+	                    new String[]{Manifest.permission.READ_CONTACTS}, 1);
+	        } else {
+	            readContacts();
+	        }
+	    }
+	
+	    /**
+	     * 读取联系人
+	     */
+	    private void readContacts() {
+	        Cursor cursor = null;
+	
+	        try{
+	            //查询联系人数据   得到Cursor对象
+	            cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+	                    null,null,null,null);
+	            if(cursor != null){
+	                while(cursor.moveToNext()){
+	                    //获取联系人姓名
+	                    String name = cursor.getString(cursor.getColumnIndex(
+	                            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+	                    //获取联系人号码
+	                    String phone = cursor.getString(cursor.getColumnIndex(
+	                            ContactsContract.CommonDataKinds.Phone.NUMBER));
+	                    contactList.add(name+"\n"+phone);
+	                }
+	                adapter.notifyDataSetChanged();  //刷新一下ListView
+	            }
+	        } catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            //最后一定要记得关闭cursor
+	            if(cursor != null){
+	                cursor.close();
+	            }
+	        }
+	
+	    }
+	
+	    //每申请一此危险权限,这个方法就会被调一次
+	    @Override
+	    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+	                                           @NonNull int[] grantResults) {
+	        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+	        //根据申请码 进行判断
+	        switch (requestCode) {
+	            case 1:
+	                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+	                    readContacts();
+	                } else {
+	                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+	                }
+	
+	                break;
+	            default:
+	                break;
+	        }
+	    }
 
 # 4. 内容观察者
 1. 内容观察者不是四大组件,它不需要在清单文件中配置

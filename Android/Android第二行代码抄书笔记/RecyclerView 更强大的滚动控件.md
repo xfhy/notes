@@ -298,6 +298,109 @@
          adapter.notifyItemInserted(msgList.size()-1);   //这个的效果比下面那个效果好(有动画)
           adapter.notifyDataSetChanged();
 
+# 5. 添加分割线
+
+1. 先到`drawable`下创建`divider_bg.xml`文件,写入如下代码:
+
+		<?xml version="1.0" encoding="utf-8"?>
+		<shape xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:shape="rectangle" >
+		
+		    <solid android:color="#F0F0F0"/>
+		    <size android:height="2dp"/>
+		
+		</shape>
+
+2. 再到`values.xml->styles.xml`下,在`<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">`中添加`<item name="android:listDivider">@drawable/divider_bg</item>`
+
+3. 写一个实现类，新建DividerItemDecoration
+
+		public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+	
+	    //使用系统自带的listDivider
+	    private static final int[] ATTRS = new int[]{
+	        android.R.attr.listDivider
+	    };
+	
+	    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+	    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
+	
+	    private Drawable mDivider;
+	    private int mOrientation;
+	
+	    public DividerItemDecoration(Context context,int orientation){
+	        //使用TypeArray加载该系统资源
+	        final TypedArray ta = context.obtainStyledAttributes(ATTRS);
+	        mDivider = ta.getDrawable(0);
+	        //缓存
+	        ta.recycle();
+	        setOrientation(orientation);
+	    }
+	
+	    public void setOrientation(int orientation){
+	        if(orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST){
+	            throw new IllegalArgumentException("invalid orientation");
+	        }
+	        mOrientation = orientation;
+	    }
+	    @Override
+	    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+	        if(mOrientation == VERTICAL_LIST){
+	            drawVertical(c,parent);
+	        }else{
+	            drawHorizontal(c,parent);
+	        }
+	    }
+	
+	    public void drawVertical(Canvas c,RecyclerView parent){
+	        //获取分割线的左边距，即RecyclerView的padding值
+	        final int left = parent.getPaddingLeft();
+	        //分割线右边距
+	        final int right = parent.getWidth() - parent.getPaddingRight();
+	        final int childCount = parent.getChildCount();
+	        //遍历所有item view，为它们的下方绘制分割线
+	        for(int i=0;i<childCount;i++){
+	            final View child = parent.getChildAt(i);
+	            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+	            final int top = child.getBottom() + params.bottomMargin;
+	            final int bottom = top + mDivider.getIntrinsicHeight();
+	            mDivider.setBounds(left,top,right,bottom);
+	            mDivider.draw(c);
+	        }
+	    }
+	
+	    public void drawHorizontal(Canvas c, RecyclerView parent) {
+	        final int top = parent.getPaddingTop();
+	        final int bottom = parent.getHeight() - parent.getPaddingBottom();
+	
+	        final int childCount = parent.getChildCount();
+	        for (int i = 0; i < childCount; i++) {
+	            final View child = parent.getChildAt(i);
+	            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+	                    .getLayoutParams();
+	            final int left = child.getRight() + params.rightMargin;
+	            final int right = left + mDivider.getIntrinsicHeight();
+	            mDivider.setBounds(left, top, right, bottom);
+	            mDivider.draw(c);
+	        }
+	    }
+	
+	    @Override
+	    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+	        if(mOrientation == VERTICAL_LIST){
+	            //设置偏移的高度是mDivider.getIntrinsicHeight，该高度正是分割线的高度
+	            outRect.set(0,0,0,mDivider.getIntrinsicHeight());
+	        }else{
+	            outRect.set(0,0,mDivider.getIntrinsicWidth(),0);
+	        }
+	    }
+	}
+
+4. 接着在MainActivity.java添加如下代码：
+
+	mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+	DividerItemDecoration.VERTICAL_LIST));
+
 
 # 坑点
 

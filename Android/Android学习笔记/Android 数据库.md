@@ -319,7 +319,7 @@ getWritableDatabase:
 	    }
 
 **使用LitePal更新数据**
-> 将需要更新为xx的数据封装到bean对象中,
+> 将需要更新为xx的数据封装到bean对象中,然后调用updateAll(),将where部分填好.
 
 	 	Book book = new Book();
         book.setAuthor("你猜");   //更新为xx
@@ -327,3 +327,57 @@ getWritableDatabase:
 
         //这里和SqLiteDatabase的update()方法的where参数部分有点类似,但更简洁
         book.updateAll("name= ? and author = ?","数学书","晓峰哈虐");
+
+更新所有字段为默认值:book.updateAll();
+
+**使用LitePal删除数据**
+
+	//删除数据   不传参则删除全部
+    //参数:表名.class   where占位符   占位符的值
+    DataSupport.deleteAll(Book.class,"price < ?","20");
+
+**使用LitePal查询数据**
+
+查询全部:
+
+	List<Book> books = DataSupport.findAll(Book.class);
+    for (Book book : books) {
+        Log.i(TAG, "name: "+book.getName());
+        Log.i(TAG, "author: "+book.getAuthor());
+        Log.i(TAG, "press: "+book.getPress());
+        Log.i(TAG, "id: "+book.getId());
+        Log.i(TAG, "pages: "+book.getPages());
+        Log.i(TAG, "price: "+book.getPrice());
+    }
+
+	//查询第一条数据
+    Book firstBook = DataSupport.findFirst(Book.class);
+    //查询book表的最后一条数据
+    Book lastBook = DataSupport.findLast(Book.class);
+
+    //查询book表的 指定的几列数据
+    DataSupport.select("name","author").find(Book.class);
+
+    //查询book表的   指定的约束条件  数据
+    DataSupport.where("pages > ?","400").find(Book.class);
+
+    //查询book表的  指定结果的排序方式
+    DataSupport.order("price desc").find(Book.class);  //desc是降序     asc或者不写是升序
+
+    //查询book表的  指定查询结果数量
+    DataSupport.limit(3).find(Book.class);
+
+    //指定查询结果的偏移量
+    DataSupport.offset(3).find(Book.class);
+    DataSupport.limit(3).offset(3).find(Book.class);  //查询第4,5,6条数据
+
+    //组合查询
+    DataSupport.select("name","author","pages")
+            .where("pages > ?","400")
+            .order("pages")
+            .limit(10)
+            .offset(10)
+            .find(Book.class);
+
+    //用原生SQL语句进行查询
+    DataSupport.findBySQL("select * from Book where pages > ? and price < ?","400","20"); 
