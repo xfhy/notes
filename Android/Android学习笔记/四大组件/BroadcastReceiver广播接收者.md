@@ -3,13 +3,18 @@
 [TOC]
 
 #1.简单介绍
-		1.Android系统内部相当于已经有一个电台 定义了好多的广播事件  
-			比如外拨电话 短信到来 sd卡状态  电池电量变化....
-		2.谷歌工程师给我们定义了一个组件专门用来接收这些事件的
-		3.谷歌工程师为什么要设计这样一个组件  目的就是为了方便开发者进行开发 
-		4.当在应用程序中注册了一个广播监听器,即使是退出了程序,当广播事件发生时,该程序的进程会被创建,
-			执行onReceive()方法.
-#2.使用
+
+1. Android系统内部相当于已经有一个电台 定义了好多的广播事件  
+比如外拨电话 短信到来 sd卡状态  电池电量变化....
+
+2. 谷歌工程师给我们定义了一个组件专门用来接收这些事件的
+
+3. 谷歌工程师为什么要设计这样一个组件  目的就是为了方便开发者进行开发 
+
+4. 当在应用程序中注册了一个广播监听器,即使是退出了程序,当广播事件发生时,该程序的进程会被创建,
+执行onReceive()方法.
+
+#2.使用(静态广播)
 		1.创建一个类,类名类似于xxReceiver,继承自BroadcastReceiver.覆写onReceive()方法
 		2.需要在清单文件中配置
 		3.可以监听很多事件,这些事件可以通过在清单文件中配置<intent-filter>中的action,可以配置多个action,一个
@@ -129,4 +134,58 @@
 
 				<!--想让上面的这3个事件生效 必须的加上这样的一个data   -->
                 <data android:scheme="package" />
-		
+
+
+# 6. 本地广播
+> Android引入了一套本地广播机制,使用这个机制发出的广播只能够在应用程序的内部进行传递,并且广播接收器也只能接收
+来自本程序发出的广播,这样所有的安全性问题就都不存在了.主要是使用了一个LocalBroadcastManager来对广播进行管理.
+
+	public class MainActivity extends AppCompatActivity {
+
+	    private IntentFilter intentFilter;
+	    private LocalReceiver localReceiver;
+	    private LocalBroadcastManager localBroadcastManager;
+	
+	    @Override
+	    protected void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        setContentView(R.layout.activity_main);
+	
+	        //1. 获取LocalBroadcastManager实例
+	        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+	
+	        Button bt_send_broadcast = (Button) findViewById(R.id.bt_send_broadcast);
+	        bt_send_broadcast.setOnClickListener(new View.OnClickListener() {
+	            @Override
+	            public void onClick(View v) {
+	                //2. 发送本地广播
+	                Intent intent = new Intent();
+	                intent.setAction("com.xfhy.localbroadcast");
+	                intent.putExtra("name","xfhy");   //封装一条数据到Intent对象中
+	                localBroadcastManager.sendBroadcast(intent);
+	            }
+	        });
+	        //3. 创建广播接收者    注册本地广播监听器
+	        localReceiver = new LocalReceiver();
+	        intentFilter = new IntentFilter();
+	        intentFilter.addAction("com.xfhy.localbroadcast");
+	        localBroadcastManager.registerReceiver(localReceiver,intentFilter);
+	    }
+	
+	    @Override
+	    protected void onDestroy() {
+	        super.onDestroy();
+	        //4. 取消注册广播
+	        localBroadcastManager.unregisterReceiver(localReceiver);
+	    }
+	}
+
+本地广播是无法通过静态注册的方式来接收的.
+使用本地广播的几点优势:
+
+- 可以明确地知道正在发生的广播不会离开我们的程序,因此不必担心机密数据泄露
+- 其他的程序无法将广播发送到我们程序的内部,因此不需要担心会有安全漏洞的隐患
+- 发生本地广播比发送系统全局广播将会更加高效
+
+## 注意
+不要在onReceive()方法中添加过多的逻辑或者进行任何的耗时操作,因为在广播接收器中是不允许开启线程的,当onReceive()方法运行了较长时间而没有结束时,程序就会报错.因此,广播接收器更多的是扮演一种打开程序其他组件的角色,比如创建一条状态栏通知,或者启动一个服务等.

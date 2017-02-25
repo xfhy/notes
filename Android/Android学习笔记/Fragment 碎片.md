@@ -12,6 +12,8 @@
 	        android:orientation="horizontal"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent">
+			
+			<!--name:属性来显示指明要添加的碎片类名,注意一定要将包名也加上-->
 	        <fragment android:name="com.itheima.fragment.Fragment1"
 	                android:id="@+id/list"
 	                android:layout_weight="1"
@@ -41,6 +43,9 @@
 	    }
 
 4. name属性 要指定我们自己定义的fragment
+
+**注意:Fragment有两个不同包下的Fragment供你选择,一个是系统内置的android.app.Fragment,一个是support-v4库中的android.support.v4.app.Fragment.
+强烈建议使用support-v4库中的Fragment,因为它可以让碎片在所有的Android系统版本中保持功能一致性.如果需要兼容**
 
 # 2. 动态替换fragment
 		//3. 获取FragmentManager实例
@@ -95,4 +100,32 @@
 # 6.fragment之间的通信
 >Fragment有一个公共的桥梁 Activity
 
-# 7. 
+# 7. 模拟返回栈
+
+> FragmentTransaction中提供了一个addToBackStack()方法,可以用于将一个事务添加到返回栈中.
+
+	private void replaceFragment(Fragment fragment) {
+	        FragmentManager fragmentManager = getSupportFragmentManager();
+	        FragmentTransaction transaction = fragmentManager.beginTransaction();
+	        transaction.replace(R.id.right_layout, fragment);
+	        transaction.addToBackStack(null);
+	        transaction.commit();
+	    }
+
+# 8. 动态加载布局的技巧
+
+### 8.1 使用限定符
+
+写两份activity_main,一份放在layout下面.一份放在layout-large文件夹下面.  其中large就是一个限定符,那些屏幕被认为是large的设备就会自动加载layout-large文件夹下面的布局,而小屏幕的设备则还是会加载layout文件夹的布局.
+
+Android中 常见限定符:
+![Android中 常见限定符](http://img.blog.csdn.net/20160311130101005)
+
+### 8.2 使用最小宽度限定符
+>有时候我们希望可以更加灵活地为不同设备加载布局,不管它们是不是被系统认定为`large`,这时就可以使用最小宽度限定符
+
+在`res`目录下新建`layout-sw600dp`文件夹,然后在这个文件夹下新建`activity_main`布局.当程序运行在屏幕宽度大于600dp的设备上时,
+会加载`layout-sw600dp/activity_main`布局,当程序运行在屏幕宽度小于600dp的设备上时,则仍然加载默认的`layout/activity_main`布局
+
+
+

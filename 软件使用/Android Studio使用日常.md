@@ -24,10 +24,9 @@
  - `Ctrl+O`  重写父类的方法(还可以跳转到某个方法所在行)
  
  - `Shit+Alt+M` 提取方法
-
- - `Ctrl+Alt+V` 提取局部变量
-
+	
  - `shift+F10`  快速运行项目
+ - 快速遍历集合:你可以输入myList.for，然后按下Tab键，就会自动生成for循环代码。	
 
 # 2.Logcat使用
 
@@ -52,3 +51,12 @@
 	        versionCode 2
 	        versionName "2.0"
 	    }
+
+# 5. 获取Android机中的文件
+>利用Android Device Monitor工具
+
+点击`Android Studio`导航栏中的`Tools`->`Android`->`Android Device Monitor`,效果如下图:
+
+![Android Device Monitor工具](http://olg7c0d2n.bkt.clouddn.com/17-2-24/49351660-file_1487943471539_4208.png)
+
+和eclipse上面的简直一毛一样.爽....
