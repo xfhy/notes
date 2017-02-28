@@ -17,6 +17,9 @@
  - `alt + insert`  快速实现父类的构造方法(getter,setter,equals,hashCode,toString等)
 
  - `Alt+Shift+P`:实现接口方法
+ - `Ctrl+Alt+T` : 快速实现很多东西,比如`if/else`,`try_catch`
+ 
+![](http://olg7c0d2n.bkt.clouddn.com/17-2-26/48308793-file_1488118565497_bfe1.png)
 
  - `Ctrl+delete`(或`Ctrl+Backspace`) 快速删除当前单词
 
@@ -27,6 +30,7 @@
 	
  - `shift+F10`  快速运行项目
  - 快速遍历集合:你可以输入myList.for，然后按下Tab键，就会自动生成for循环代码。	
+ - `ifn`  快速补全代码,判断是否变量为null
 
 # 2.Logcat使用
 
@@ -60,3 +64,13 @@
 ![Android Device Monitor工具](http://olg7c0d2n.bkt.clouddn.com/17-2-24/49351660-file_1487943471539_4208.png)
 
 和eclipse上面的简直一毛一样.爽....
+
+# 6. 在代码中快速跳转至函数的api
+
+![](http://olg7c0d2n.bkt.clouddn.com/17-2-27/71297359-file_1488172308728_20ad.png)
+
+如图,当需要查看该函数有什么功能,或者该类.直接点击这个按钮即可快速跳转到该函数的api(会打开浏览器).该按钮的快捷键是`Shift+F2`
+
+# 7. 将源码浓缩
+
+将源码根目录下的build和app下面的build删除,源码瞬间从几十M变为几百K

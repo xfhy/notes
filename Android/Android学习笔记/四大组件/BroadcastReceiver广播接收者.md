@@ -15,16 +15,32 @@
 执行onReceive()方法.
 
 #2.使用(静态广播)
-		1.创建一个类,类名类似于xxReceiver,继承自BroadcastReceiver.覆写onReceive()方法
-		2.需要在清单文件中配置
-		3.可以监听很多事件,这些事件可以通过在清单文件中配置<intent-filter>中的action,可以配置多个action,一个
-			action就是一个广播事件,可以监听多个广播.然后在类中,监听到了广播则调用onReceive()方法
-		4.getResultData();Retrieve the current result data, as set by the previous receiver. Often this is null.
-		5.setResultData("17951"+currentNumber);Change the current result data of this broadcast; 
-		6.在onReceive()判断是哪个广播事件
-			//[1]获取到当前广播的事件类型 
-			String action = intent.getAction();
-			//[2]对action做一个判断 
+
+1. 创建一个类,类名类似于xxReceiver,继承自BroadcastReceiver.覆写onReceive()方法
+
+2. 需要在清单文件中配置
+
+3. 可以监听很多事件,这些事件可以通过在清单文件中配置<intent-filter>中的action,可以配置多个action,一个
+action就是一个广播事件,可以监听多个广播.然后在类中,监听到了广播则调用onReceive()方法,比如像下面这样
+
+		<receiver android:name=".broadcast.SmsBroadcast">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+	    </receiver>
+
+4. getResultData();Retrieve the current result data, as set by the previous receiver. Often this is null.
+
+5. setResultData("17951"+currentNumber);Change the current result data of this broadcast; 
+
+6. 在onReceive()判断是哪个广播事件
+
+   //[1]获取到当前广播的事件类型 
+
+	`String action = intent.getAction();`
+
+   //[2]对action做一个判断 
+
 			if("android.intent.action.MEDIA_UNMOUNTED".equals(action)){
 				System.out.println("说明sd卡 卸载了");
 				
@@ -32,9 +48,12 @@
 				
 				System.out.println("说明sd卡挂载了");
 			}
+
 #3.开启Activity
+
 		1.如果在广播里面开启Activity 要设置一个任务栈环境
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+
 #4.自定义广播
 
 ##4.1无序广播
@@ -186,6 +205,8 @@
 - 可以明确地知道正在发生的广播不会离开我们的程序,因此不必担心机密数据泄露
 - 其他的程序无法将广播发送到我们程序的内部,因此不需要担心会有安全漏洞的隐患
 - 发生本地广播比发送系统全局广播将会更加高效
+
+
 
 ## 注意
 不要在onReceive()方法中添加过多的逻辑或者进行任何的耗时操作,因为在广播接收器中是不允许开启线程的,当onReceive()方法运行了较长时间而没有结束时,程序就会报错.因此,广播接收器更多的是扮演一种打开程序其他组件的角色,比如创建一条状态栏通知,或者启动一个服务等.
