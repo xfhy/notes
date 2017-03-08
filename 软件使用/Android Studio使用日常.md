@@ -32,6 +32,16 @@
  - 快速遍历集合:你可以输入myList.for，然后按下Tab键，就会自动生成for循环代码。	
  - `ifn`  快速补全代码,判断是否变量为null
 
+ - 按两次Shift:Search Everywhere
+
+ - `Alt+1`  项目显示/隐藏
+
+ - `Ctrl+shift+R`  Go To File
+
+ - `Ctrl+E` 打开最近文件列表
+
+ - `alt+home` 导航栏
+
 # 2.Logcat使用
 
 >打开 `LogCat`在搜索框右侧的`No Filters`中选择 `Edit Filter Configuration`选项,然后在`Name`中输入过滤器的名称，在`by Package Name`中输入你的应用的`Package Name`就可以了。然后在搜索框右侧的过滤器选项中选择你刚选择过滤器就可以了。
@@ -74,3 +84,10 @@
 # 7. 将源码浓缩
 
 将源码根目录下的build和app下面的build删除,源码瞬间从几十M变为几百K
+
+# 8. 引入别人的SDK
+
+- app模块下有个libs目录,用来存放Jar包的
+
+- src/main/jniLibs  这里是专门用来存放so文件的
+

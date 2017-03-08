@@ -13,7 +13,7 @@
 	当这项操作完成时，service应该停止它本身。
 
 	还有一种“绑定”状态的service，通过调用bindService()来启动，一个绑定的service提供一个允许组件与service交互的接口，
-	可以发送请求、获取返回结果，还可以通过夸进程通信来交互（IPC）。绑定的service只有当应用组件绑定后才能运行，
+	可以发送请求、获取返回结果，还可以通过跨进程通信来交互（IPC）。绑定的service只有当应用组件绑定后才能运行，
 	多个组件可以绑定一个service，当调用unbind()方法时，这个service就会被销毁了。
 	另外，在官方的说明文档中还有一个警告：
 		service与activity一样都存在与当前进程的主线程中，所以，一些阻塞UI的操作，比如耗时操作不能放在service里进行，
@@ -21,23 +21,35 @@
 		这时应用会弹出是强制关闭还是等待的对话框。所以，对service的理解就是和activity平级的，只不过是看不见的，
 		在后台运行的一个组件，这也是为什么和activity同被说为Android的基本组件。
 
+**注意**
+
+- 服务(Service)是Android中实现后台运行的解决方案,它非常适合去执行那些不需要和用户交互而且还长期运行的任务.
+- 不过需要注意的是,服务并不是运行在一个独立的进程当中,而是依赖于创建服务时所在的应用程序进程.当某个应用程序进程被杀掉时,所有依赖于该进程的服务也会停止运行.
+- 另外,也不要被服务的后台概念所迷惑,实际上服务并不会自动开启线程,所有的代码都是**默认运行在主线程中的**.也就是说,我们需要在服务的内部手动创建子线程,并在这里执行具体的任务,否则就有可能出现**主线程被阻塞住**的情况.
+- 实际上每个服务都只会存在一个实例.
+
 #2. 开启服务
  	Services can be started with Context.startService() and Context.bindService(). 
-#3. 关闭服务
+#3. 停止服务
 	
+	stopService(stopIntent);
+
 #4. start方式开启服务的特点(面试)
-	服务是在后台运行的 可以理解成是没有界面的Activity
-	定义四大组件的方式都是一样的,都需要在清单文件中注册
-	定义一个类继承自Service
 
-	特点:
-		(1) 服务通过startService()方式开启,第一次开启服务,会执行服务的onCreate()方法和
-		onStartCommand()方法
-		(2) 如果第二次再点击按钮开启服务,服务之后执行onStartCommand()方法
-		(3) 服务被开启后,会在设置界面的running里面找得到这个服务
+> 服务是在后台运行的 可以理解成是没有界面的Activity
+定义四大组件的方式都是一样的,都需要在清单文件中注册
+定义一个类继承自Service
+
+特点:
+
+(1) 服务通过startService()方式开启,第一次开启服务,会执行服务的onCreate()方法和nStartCommand()方法
+
+(2) 如果第二次再点击按钮开启服务,服务之后执行onStartCommand()方法
+
+(3) 服务被开启后,会在设置界面的running里面找得到这个服务
 
 
-<font size="5" color="#ff0000"> (4) startService开启服务,服务就会在后台长期运行,知道用户手工停止,或者调用stopService()方法,服务才会被销毁.</font>
+<font size="5" color="#ff0000"> (4) startService开启服务,服务就会在后台长期运行,直到用户手工停止,或者调用stopService()方法,服务才会被销毁.</font>
 
 #5. bindService   方式开启服务的特点(面试)
 		(1) 当点击按钮第一次开启服务,会依次执行服务的onCreate()方法->onBind()方法
@@ -165,3 +177,128 @@
 
 ##aidl的应用场景
 支付宝   非常有名    支付的方法
+
+
+# 11. Activity与Service进行通信
+
+1. 首先在Service里面新建一个类继承自Binder,
+
+	private DownloadBinder mBinder = new DownloadBinder();
+
+    class DownloadBinder extends Binder{
+        /**
+         * 模拟的下载资源的方法
+         */
+        public void startDownload(){
+            Log.i(TAG, "startDownload: executed");
+        }
+
+        /**
+         * 模拟的下载资源时的获取下载进度的方法
+         * @return
+         */
+        public int getProgress(){
+            Log.i(TAG, "getProgress: executed");
+            return 0;
+        }
+
+    }
+
+2. 然后重写Service类里面的onBind()方法,返回创建出来的DownloadBinder对象
+
+3. 在Activity中新建一个服务里面Binder类的实例.
+
+		private MyService.DownloadBinder downloadBinder;
+	
+		/**
+	     * 监听服务的连接状态
+	     */
+	    private ServiceConnection connection = new ServiceConnection() {
+	        @Override
+	        public void onServiceConnected(ComponentName name, IBinder service) {
+	            Log.i(TAG, "onServiceConnected: 连接上服务");
+	            //成功绑定服务时调用
+	            downloadBinder = (MyService.DownloadBinder)service;
+	            downloadBinder.startDownload();
+	            downloadBinder.getProgress();
+	        }
+	
+	        @Override
+	        public void onServiceDisconnected(ComponentName name) {
+	            //断开连接
+	            Log.i(TAG, "onServiceDisconnected: 断开连接");
+	        }
+	    };
+
+4. 绑定服务
+
+		//绑定服务
+        //参数:Intent,ServiceConnection实例,flag     这里是BIND_AUTO_CREATE表示绑定后自动创建服务
+        bindService(intent,connection,BIND_AUTO_CREATE);
+
+5. 解绑服务
+                
+		unbindService(connection);
+
+# 12. 使用	前台进程
+
+> 服务的系统优先级还是比较低的,当系统出现内存不足的情况时,就有可能会回收掉正在后台运行的服务.如果你希望服务可以一直保持运行的状态,而不会由于系统内存不足的原因导致被回收,就可以考虑使用前台进程.
+
+> 前台服务和普通服务的罪的的区别就在于,它会一直有一个正在运行的图标在系统的状态栏显示.
+
+	@Override
+    public void onCreate() {
+        super.onCreate();
+
+        //设置当前Service为前台服务
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
+        Notification notification = new NotificationCompat.Builder(this)
+                .setContentTitle("This is content title")  //设置标题
+                .setContentText("this is content text")   //设置内容
+                .setWhen(System.currentTimeMillis())      //设置时间
+                .setSmallIcon(R.mipmap.ic_launcher)     //设置状态栏小图标
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher)) //大图标
+                .setContentIntent(pendingIntent)  //设置点击时跳转事件
+                .build();  //创建
+        startForeground(1,notification);   //开始前台服务    让MyService变成一个前台服务,并在状态栏显示出来
+    }
+
+# 13. IntentService
+
+> 为了可以简单地创建一个异步的,会自动停止的服务,Android专门提供了一个IntentService类.
+
+> 运行结束后会自动停止
+
+> 集开启线程和自动停止于一身.
+
+	public class MyIntentService extends IntentService {
+
+	    private final static String TAG = "MyIntentService";
+	
+	    public MyIntentService() {
+	        super("MyIntentService");  //调用父类的有参构造函数
+	    }
+	
+	    //这个方法是在子线程中运行    一般在这里处理一些具体的逻辑,不用担心ANR问题
+	    @Override
+	    protected void onHandleIntent(Intent intent) {
+	        Log.i(TAG, "onHandleIntent: 当前线程"+Thread.currentThread().getId());
+	        if (intent != null) {
+	        }
+	    }
+	
+	    //根据IntentService的特性,在服务运行结束后会自动停止的
+	    @Override
+	    public void onDestroy() {
+			//这是在主线程
+	        Log.i(TAG, "onDestroy: ");
+	        super.onDestroy();
+	    }
+	}
+
+开启IntentService
+
+	 Intent intentService = new Intent(this, MyIntentService.class);
+                startService(intentService);
+
