@@ -128,4 +128,6 @@ Android中 常见限定符:
 会加载`layout-sw600dp/activity_main`布局,当程序运行在屏幕宽度小于600dp的设备上时,则仍然加载默认的`layout/activity_main`布局
 
 
+# 9. 关于ActionBar和Toolbar
 
+**这里最好是自己定义标题栏,是因为Fragment中最好不要直接使用ActionBar或Toolbar,不然在复用的时候可能会出现一些你不想看到的效果.**

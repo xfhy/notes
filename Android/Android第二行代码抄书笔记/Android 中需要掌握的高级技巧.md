@@ -296,3 +296,148 @@
 
 > 其实多窗口模式并不会改变活动原有的生命周期,只是会将用户最近交互过的那个活动设置为运行状态,而将多窗口模式下另外一个可见的活动设置为暂停状态.如果这时用户又去和暂停的活动进行交互,那么该活动就变成运行状态,之前处于运行状态的活动变成暂停状态.
 
+我们选择MaterialTest项目和LBSTest项目。
+
+先启动MaterialTest项目：
+
+	MaterialTest: onCreate
+	MaterialTest: onStart
+	MaterialTest: onResume
+
+然后长按Overview按钮，进入多窗口模式：
+
+	MaterialTest: onPause
+	MaterialTest: onStop
+	MaterialTest: onDestory
+	MaterialTest: onCreate
+	MaterialTest: onStart
+	MaterialTest: onResume
+	MaterialTest: onPause
+
+可以看到MaterialTest经历了一个重建的过程。其实这是个正常现象，因为进入到多窗口模式后活动的大小发生了比较大的变化，此时默认是会重新创建活动的。进入多窗口模式后，MaterialTest变成了暂停状态。
+
+接着在Overview列表界面选中LBSTest程序
+
+	LBSTest: onCreate
+	LBSTest: onStart
+	LBSTest: onResume
+
+现在LBSTset变成了运行状态。
+
+我们随意操作一下MaterialTest程序：
+
+	LBSTest: onPause
+	MaterialTest: onResume
+
+在多窗口模式下，用户仍然可以看到处于暂停状态的应用，那么像视频播放器之类的应用在此时就应该能继续播放视频才对。因此，我们最好不要再活动的onPause()方法中去处理视频播放的暂停逻辑，而是应该在onStop()方法中去处理，并且在onStart()方法恢复视频的播放。
+
+另外，针对于进入多窗口模式时活动会被重新创建，如果你想改变这一默认行为，可以在AndroidManifest.xml活动中进行如下配置。
+
+	<activity
+	   android:name= ".MainActivity"
+	   android:label= "Fruits"
+	   android:configChanges="orientation|keyboardHidden|screenSize|screenLayout">
+	</activity>
+
+## 6.2 禁用多窗口模式
+
+只需要在AndroidManifest.xml的<application>或<activity>标签中加入如下属性即可：
+
+	android:resizeableActivity=["true" | "false"];
+
+其中，true表示应用支持多窗口模式，false表示应用不支持多窗口模式，如果不配置这个属性，那么默认值为true。
+
+虽说android:resizeableActivity这个属性的用法很简单，但是它还存在着一个问题，就是这个属性只有当项目的targetSdkVersion指定成24或者更高的时候才会有用，否则这个属性是无效的。那么比如说我们将项目的targetSdkVersion指定成23，这个时候尝试进入多窗口模式,会发现告知我们此应用在多窗口模式可能无法正常工作.
+
+针对这个情况，还有一种解决方案，Android规定，如果项目指定的targetSdkVersion低于24，并且活动是不允许横竖屏切换的，那么该应用也将不支持多窗口模式。
+
+默认情况下，我们的应用都是可以随着手机的旋转自由地横竖屏切换，如果想要应用不允许横竖屏切换，那么就需要在AndroidManifest.xml的<activity>标签中加入如下属性即可：
+
+	android:screenOrientation=["portrail" | "landscape"];
+
+portrail表示活动只允许竖屏，landscape表示活动只允许横屏，当然android:screenOrientation还有很多的可选值，"portrail" | "landscape"是最常用的。
+
+# 7. Lambda表达式
+
+> Java 8 引入了一些新特性,如Lambda表达式,stream API,接口默认实现等等.
+
+但是目前能用的就只有Lambda表达式,因为stream API和接口默认实现等特性都只支持Android 7.0及以上的系统.而Lambda表达式却最低兼容到Android 2.3系统.
+
+Lambda表达式本质上是一种匿名方法，它既没有方法名，也没有访问修饰符和返回值类型，使用它来编写代码将会更加简洁，也更加易读。
+
+如果想要在Android项目中使用Lambda表达式或者Java8的其他新特性，首先我们需要在app/build.gradle中添加如下配置。
+
+	android {
+	    ·············
+		defaultConfig {
+	        jackOptions.enabled = true
+	    }
+	    compileOptions {
+	        sourceCompatibility JavaVersion.VERSION_1_8
+	        targetCompatibility JavaVersion.VERSION_1_8
+	    }
+	}
+
+比如说传统情况下开启子线程
+
+	new Thread(new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            //处理具体的逻辑
+        }
+    }).start();
+
+而使用Lambda表达式则可以这样使用：
+
+		new Thread(() ->
+        {
+            //处理具体的逻辑
+        }).start();
+因为Thread类的构造函数接收的参数是一个Runnable接口，并且该接口中只有一个待实现方法。
+
+**凡是这种只有一个待实现方法的接口，都可以使用Lambda表达式的写法。**
+
+接下啦我们尝试自定义一个接口，然后再使用Lambda表达式的方式进行实现：
+
+	public interface MyListener
+	{
+	    String doSomething(String a,int b);
+	}
+
+MyListener接口中也只有一个待实现方法，这和Runnable接口的结构是基本一致的。唯一不同的是，MyListener中的doSomething()方法是有参数并且有返回值的。
+
+另外，Java还可以根据上下文自动推断出Lambda表达式中的参数类型，上面的也可以简化为：
+
+	 MyListener listener1 = (a,b) ->
+        {
+            String result = a + b;
+            return result;
+        };
+
+**在Android中的应用：**
+
+	 button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+               //处理点击事件
+            }
+        });
+使用Lambda后表达式后为：
+
+	button = (Button) findViewById(R.id.button);
+        button.setOnClickListener((v) ->
+        {
+            //处理点击事件
+        });
+另外，当接口的待实现方法有且只有一个参数的时候，还可以进一步简化
+
+	 button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(v ->
+        {
+            //处理点击事件
+        });
