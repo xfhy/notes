@@ -1,0 +1,1426 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+  width: 45em;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 30px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><title>Android 中需要掌握的高级技巧</title></head><body><article class="markdown-body"><h1 id="android"><a name="user-content-android" href="#android" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Android 中需要掌握的高级技巧</h1>
+<p><img alt="" src="http://upload-images.jianshu.io/upload_images/3532835-d1e86aaff5276287.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" /></p>
+<h1 id="1-context"><a name="user-content-1-context" href="#1-context" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 获取全局Context</h1>
+<blockquote>
+<p>Android提供了一个Application类,每当应用程序启动的时候,系统就会自动将这个类进入初始化.而我们可以定制一个自己的Application类,以便于管理应用程序内一些全局的状态信息,比如说全局Context;</p>
+</blockquote>
+<p>1.代码如下</p>
+<pre><code>public class MyApplication extends Application {
+
+    private static Context context;
+
+    @Override
+    public void onCreate() {
+        context = getApplicationContext();
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+}
+</code></pre>
+<p>2.接下来需要告知系统,当程序启动的时候应该初始化MyApplication类.<br />
+需要在清单文件中写一下:(一定要写完整包名)</p>
+<pre><code>&lt;application
+    android:name="com.xfhy.materialtest.MyApplication"
+    ......
+&lt;/application&gt;
+</code></pre>
+<p>3.任何一个项目都只能配置一个Application,对于这种情况(当需要用LitePal的时候,需要在清单文件中配置android:name=&rdquo;org.litepal.LitePalApplication&rdquo;),LitePal提供了很简单的解决方案,那就是在我们自己的Application中去调用LitePal的初始化方法就可以了.在MyApplication中的onCreate()方法中加入如下代码<code>LitePal.initialize(context);</code></p>
+<h1 id="2-intent"><a name="user-content-2-intent" href="#2-intent" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 使用Intent传递对象</h1>
+<blockquote>
+<p>putExtra()方法中所支持的数据类型是有限的,虽然常用的数据类型是支持的,但是在传递一些自定义对象时,就会发现无从下手.</p>
+</blockquote>
+<h2 id="21-serializable"><a name="user-content-21-serializable" href="#21-serializable" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 Serializable 方式</h2>
+<blockquote>
+<p>Serializable是序列化的意思,表示将一个对象转换成可存储或可传输的状态.至于序列化的方法也很简单,只需要让一个类去实现Serializable这个接口就可以了.</p>
+</blockquote>
+<p>1.比如需要序列化一个Person类</p>
+<pre><code>public class Person implements Serializable{
+
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+</code></pre>
+<p>2.传递时这样写</p>
+<pre><code>Person person = new Person();
+Intent intent = new Intent(mContext,SecondActivity.class);
+intent.putExtra("person_data",person);
+</code></pre>
+<p>3.接收数据时这样写</p>
+<pre><code>Person person = (Person)getIntent().getSerializableExtra("person_data");
+</code></pre>
+<h2 id="22-parcelable"><a name="user-content-22-parcelable" href="#22-parcelable" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.2 Parcelable 方式</h2>
+<p>1.写一个Person类,继承自Parcelable.需要实现describeContents()方法和writeToParcel()方法;还需要写一个CREATOR常量.</p>
+<pre><code>public class Person implements Parcelable{
+
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    //直接返回0即可
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    //这里需要调用Parcel的writeXXXX方法将Person类中的字段一一写出
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);   //写出name
+        dest.writeInt(age);       //写出age
+    }
+
+    public static final Parcelable.Creator&lt;Person&gt; CREATOR = new Parcelable.Creator&lt;Person&gt;(){
+        @Override
+        public Person createFromParcel(Parcel source) {
+            Person person = new Person();
+
+            //这里读取的顺序一定要与上面的写入顺序一致
+            person.name = source.readString();    //读取name
+            person.age = source.readInt();         //读取age
+            return person;
+        }
+
+        @Override
+        public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
+
+}
+</code></pre>
+<p>2.传递时这样写</p>
+<pre><code>Person person = new Person();
+Intent intent = new Intent(mContext,SecondActivity.class);
+intent.putExtra("person_data",person);
+</code></pre>
+<p>3.接收数据时这样写</p>
+<pre><code>Person person = (Person)getIntent().getParcelableExtra("person_data");
+</code></pre>
+<h1 id="3"><a name="user-content-3" href="#3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.定制自己的日志工具</h1>
+<blockquote>
+<p>虽然 Android 中自带的日志工具功<br />
+能非常强大，但也不能说是完全没有缺点，例如在打印日志的控制方面就做得不够好。<br />
+打个比方，你正在编写一个比较庞大的项目，期间为了方便调试，在代码的很多地方都<br />
+打印了大量的日志。最近项目已经基本完成了，但是却有一个非常让人头疼的问题，之前用<br />
+于调试的那些日志，在项目正式上线之后仍然会照常打印，这样不仅会降低程序的运行效率，<br />
+还有可能将一些机密性的数据泄露出去。<br />
+那该怎么办呢，难道要一行一行把所有打印日志的代码都删掉？显然这不是什么好点<br />
+子，不仅费时费力，而且以后你继续维护这个项目的时候可能还会需要这些日志。因此，最<br />
+理想的情况是能够自由地控制日志的打印，当程序处于开发阶段就让日志打印出来，当程序<br />
+上线了之后就把日志屏蔽掉。</p>
+</blockquote>
+<pre><code>    //只需要控制LEVEL的大小就可以控制输出的等级
+    public class LogUtil {
+    public static final int VERBOSE = 1;//啰嗦，等级最低的
+    public static final int DEBUG = 2;//调试
+    public static final int INFO = 3;//信息
+    public static final int WARN = 4;//警告
+    public static final int ERROR = 5;//错误
+    public static final int NOTHING = 6;//什么也不打印出来
+    public static final int LEVEL = VERBOSE;//LEVEL:标准
+    public static void v(String tag,String msg){
+        if(LEVEL&lt;=VERBOSE){//如果大于或者等于定义的标准就打印出来
+            Log.v(tag, msg);
+        }
+    }
+    public static void d(String tag,String msg){
+        if(LEVEL&lt;=DEBUG){
+            Log.d(tag, msg);
+        }
+    }
+    public static void i(String tag,String msg){
+        if(LEVEL&lt;=INFO){
+            Log.i(tag, msg);
+        }
+    }
+    public static void w(String tag,String msg){
+        if(LEVEL&lt;=WARN){
+            Log.w(tag, msg);
+        }
+    }
+    public static void e(String tag,String msg){
+        if(LEVEL&lt;=ERROR){
+            Log.e(tag, msg);
+        }
+    }
+}
+</code></pre>
+<h1 id="4-android"><a name="user-content-4-android" href="#4-android" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 调试Android程序</h1>
+<blockquote>
+<p>在调试模式下,程序的运行效率会大大地降低,如果你的断点加在一个比较靠后的位置,需要执行很多的操作才能运行到这个断点,那么前面这些操作就都会有一些卡顿的感觉。Android还提供了另外一种调试的方式，可以让程序随时进入到调试模式。</p>
+<p>这次不需要选择调试模式来启动程序了，就使用正常的方式来启动程序。把账号和密码输入好，然后点击Android Studio顶部工具栏的Attach debugger to Android process按钮</p>
+</blockquote>
+<p>同志,就是下面这个按钮:</p>
+<p><img alt="" src="http://olg7c0d2n.bkt.clouddn.com/17-3-7/27149673-file_1488861104485_10805.png" /></p>
+<p>此时会让弹出一个进程选择提示框</p>
+<p><img alt="" src="http://upload-images.jianshu.io/upload_images/3532835-10155841a7aa0f35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" /></p>
+<p>这里目前只列出了一个进程，也就是我们当前程序的进程，选中这个进程，然后点击Ok按钮，就会让这个进程进入到调试模式了。</p>
+<h1 id="5"><a name="user-content-5" href="#5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5. 创建定时任务</h1>
+<blockquote>
+<p>Android中的定时任务一般有两种实现方式，一种是使用Java API里提供的Timer类，一种是使用Android的Alarm机制。这两种方式在多数情况下都能实现类似的效果，但Timer有一个明显的短板，它并不太适用于那些需要长期在后台运行的定时任务。我么都知道为了能让电池更加耐用，每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm则具有唤醒CPU的功能，它可以保证在大多数情况下需要执行定时任务的时候CPU都能正常工作。需要注意: 这里唤醒CPU和唤醒屏幕完全不是一个概念，千万不要产生混淆。</p>
+</blockquote>
+<h2 id="51-alarm"><a name="user-content-51-alarm" href="#51-alarm" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5.1 Alarm机制</h2>
+<p>1.如果我们要实现一个长时间在后台定时运行的服务，首先新建一个普通的服务，起名叫LongRunningService，然后将触发定时任务的代码写到onStartCommand()方法中。</p>
+<pre><code>public class LongRunningService extends Service
+{
+
+    @Override
+    public IBinder onBind(Intent intent)
+    {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //执行具体的逻辑操作
+            }
+        }).start();
+
+        //获取AlarmManager实例
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int anHour = 60 * 60 * 1000; //这是一小时的毫秒数
+        long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
+        Intent i = new Intent(this,LongRunningService.class);
+        PendingIntent pi = PendingIntent.getService(this,0,i,0);
+        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,triggerAtTime,pi);
+        return super.onStartCommand(intent, flags, startId);
+    }
+}
+</code></pre>
+<p>我们先是在onStartCommand()方法中开启了一个子线程，这样就可以在这里执行具体的逻辑操作了。之所以要在子线程里执行逻辑操作，是因为逻辑操作也是需要耗时的，如果放在主线程里执行可能会对定时任务的准确性造成轻微的影响。</p>
+<p>这样我们就将一个长时间在后台定时运行的服务成功实现了。因为一旦启动了LongRunningService，就会在onStartCommand()方法中设定一个定时任务，这样一小时后将会再次启动LongRunningService，从而也就形成了一个永久的循环，保证LongRunningService的onStartCommand()方法可以每隔一小时就执行一次。</p>
+<p>2.最后，只需要在你想要启动定式服务的时候调用如下代码即可：</p>
+<pre><code>Intent intent = new Intent(context,LongRunningService.class);
+context.startService(intent);
+</code></pre>
+<p><strong>如果你要求Alarm任务的执行时间必须准确无误，Android仍然提供了解决方案。使用AlarmManager的setExact()方法来替代set()方法，就基本可以保证任务能够准时执行了。</strong></p>
+<h2 id="52-doze"><a name="user-content-52-doze" href="#52-doze" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5.2 Doze模式</h2>
+<blockquote>
+<p>于是在Android6.0系统中，谷歌加入了一个全新的Doze模式，从而可以极大幅度地延长电池的使用寿命。首先看一下到底什么是Doze模式。当用户的设备是Android6.0或以上系统时，如果该设备未插接电源，处于静止状态（Android7.0中删除了这一条），且屏幕关闭了一段时间之后，就会进入到Doze模式。在Doze模式下，系统会对CPU，网络，Alarm等活动进行限制，从而延长了电池的使用寿命。</p>
+<p>当然，系统并不会一直处于Doze模式，而是会间歇性地退出Doze模式一小段时间，在这段时间中，应用就可以去完成它们的同步操作，Alaem任务，等等</p>
+</blockquote>
+<p>官方Doze的解释:</p>
+<p><img alt="" src="http://upload-images.jianshu.io/upload_images/3532835-337a3c4e9d8fc15a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" /></p>
+<p>左边是未插电源，设备静止，屏幕关闭，接着是短暂退出Doze模式</p>
+<p>可以看到，随着设备进入Doze模式的时间越长，间歇性地退出Doze模式的时间间隔也会越长。因为如果设备长时间不使用的话是没必要频繁退出Doze模式来执行同步等操作的，Android在这些细节上的把控是的电池寿命进一步得到了延长。</p>
+<p>接下来我们具体看一看Doze模式下有哪些功能会受到限制吧。</p>
+<ul>
+<li>网络访问本禁止</li>
+<li>系统忽略唤醒CPU或者屏幕操作</li>
+<li>系统不再执行WIFI扫描</li>
+<li>系统不再执行同步服务</li>
+<li>Alarm任务将会在下次退出Doze模式的时候执行</li>
+</ul>
+<p>注意其中的最后一条，也就是说，在Doze模式下，我们的Alarm任务将会变得不准时。当然，这在大多数情况下都是合理的，因为只有当用户长时间不使用手机的时候才会进入Doze模式，通常在这种情况下对Alarm任务的准时性要求并没有那么高。</p>
+<p>不过，如果你真的有非常特殊的需求，要求Alarm任务即使在Doze模式下也必须正常执行，Android还是提供了解决方案。调用AlarmManager的setAndAllowWhileIdle()或setExactAndAllowWhileIdle()方法就能让定时任务即使在Doze模式下也能正常执行了，这两个方法之间的区别和set(),setExact()方法之间的区别是一样的。</p>
+<h1 id="6"><a name="user-content-6" href="#6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6. 多窗口模式编程</h1>
+<blockquote>
+<p>Android 7.0 系统中却引入了一个非常有特殊的功能,多窗口模式,它允许我们在同一个屏幕中打开两个应用程序.对于手机屏幕越来越大的今天,这个功能确实是越发重要了.</p>
+<p>在多窗口模式下,整个应用的界面会缩小很多,那么编写程序时就应该多考虑使用match_parent属性,RecyclerView,ListView,ScrollView等控件,来让应用的界面能够更好地适配各种不同尺寸的屏幕,尽量不要出现屏幕尺寸过大时界面就无法正常显示的情况.</p>
+</blockquote>
+<h2 id="61"><a name="user-content-61" href="#61" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6.1 多窗口模式下的生命周期</h2>
+<blockquote>
+<p>其实多窗口模式并不会改变活动原有的生命周期,只是会将用户最近交互过的那个活动设置为运行状态,而将多窗口模式下另外一个可见的活动设置为暂停状态.如果这时用户又去和暂停的活动进行交互,那么该活动就变成运行状态,之前处于运行状态的活动变成暂停状态.</p>
+</blockquote>
+<p>我们选择MaterialTest项目和LBSTest项目。</p>
+<p>先启动MaterialTest项目：</p>
+<pre><code>MaterialTest: onCreate
+MaterialTest: onStart
+MaterialTest: onResume
+</code></pre>
+<p>然后长按Overview按钮，进入多窗口模式：</p>
+<pre><code>MaterialTest: onPause
+MaterialTest: onStop
+MaterialTest: onDestory
+MaterialTest: onCreate
+MaterialTest: onStart
+MaterialTest: onResume
+MaterialTest: onPause
+</code></pre>
+<p>可以看到MaterialTest经历了一个重建的过程。其实这是个正常现象，因为进入到多窗口模式后活动的大小发生了比较大的变化，此时默认是会重新创建活动的。进入多窗口模式后，MaterialTest变成了暂停状态。</p>
+<p>接着在Overview列表界面选中LBSTest程序</p>
+<pre><code>LBSTest: onCreate
+LBSTest: onStart
+LBSTest: onResume
+</code></pre>
+<p>现在LBSTset变成了运行状态。</p>
+<p>我们随意操作一下MaterialTest程序：</p>
+<pre><code>LBSTest: onPause
+MaterialTest: onResume
+</code></pre>
+<p>在多窗口模式下，用户仍然可以看到处于暂停状态的应用，那么像视频播放器之类的应用在此时就应该能继续播放视频才对。因此，我们最好不要再活动的onPause()方法中去处理视频播放的暂停逻辑，而是应该在onStop()方法中去处理，并且在onStart()方法恢复视频的播放。</p>
+<p>另外，针对于进入多窗口模式时活动会被重新创建，如果你想改变这一默认行为，可以在AndroidManifest.xml活动中进行如下配置。</p>
+<pre><code>&lt;activity
+   android:name= ".MainActivity"
+   android:label= "Fruits"
+   android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"&gt;
+&lt;/activity&gt;
+</code></pre>
+<h2 id="62"><a name="user-content-62" href="#62" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6.2 禁用多窗口模式</h2>
+<p>只需要在AndroidManifest.xml的<application>或<activity>标签中加入如下属性即可：</p>
+<pre><code>android:resizeableActivity=["true" | "false"];
+</code></pre>
+<p>其中，true表示应用支持多窗口模式，false表示应用不支持多窗口模式，如果不配置这个属性，那么默认值为true。</p>
+<p>虽说android:resizeableActivity这个属性的用法很简单，但是它还存在着一个问题，就是这个属性只有当项目的targetSdkVersion指定成24或者更高的时候才会有用，否则这个属性是无效的。那么比如说我们将项目的targetSdkVersion指定成23，这个时候尝试进入多窗口模式,会发现告知我们此应用在多窗口模式可能无法正常工作.</p>
+<p>针对这个情况，还有一种解决方案，Android规定，如果项目指定的targetSdkVersion低于24，并且活动是不允许横竖屏切换的，那么该应用也将不支持多窗口模式。</p>
+<p>默认情况下，我们的应用都是可以随着手机的旋转自由地横竖屏切换，如果想要应用不允许横竖屏切换，那么就需要在AndroidManifest.xml的<activity>标签中加入如下属性即可：</p>
+<pre><code>android:screenOrientation=["portrail" | "landscape"];
+</code></pre>
+<p>portrail表示活动只允许竖屏，landscape表示活动只允许横屏，当然android:screenOrientation还有很多的可选值，&rdquo;portrail&rdquo; | &ldquo;landscape&rdquo;是最常用的。</p>
+<h1 id="7-lambda"><a name="user-content-7-lambda" href="#7-lambda" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. Lambda表达式</h1>
+<blockquote>
+<p>Java 8 引入了一些新特性,如Lambda表达式,stream API,接口默认实现等等.</p>
+</blockquote>
+<p>但是目前能用的就只有Lambda表达式,因为stream API和接口默认实现等特性都只支持Android 7.0及以上的系统.而Lambda表达式却最低兼容到Android 2.3系统.</p>
+<p>Lambda表达式本质上是一种匿名方法，它既没有方法名，也没有访问修饰符和返回值类型，使用它来编写代码将会更加简洁，也更加易读。</p>
+<p>如果想要在Android项目中使用Lambda表达式或者Java8的其他新特性，首先我们需要在app/build.gradle中添加如下配置。</p>
+<pre><code>android {
+    ·············
+    defaultConfig {
+        jackOptions.enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+</code></pre>
+<p>比如说传统情况下开启子线程</p>
+<pre><code>new Thread(new Runnable()
+{
+    @Override
+    public void run()
+    {
+        //处理具体的逻辑
+    }
+}).start();
+</code></pre>
+<p>而使用Lambda表达式则可以这样使用：</p>
+<pre><code>    new Thread(() -&gt;
+    {
+        //处理具体的逻辑
+    }).start();
+</code></pre>
+<p>因为Thread类的构造函数接收的参数是一个Runnable接口，并且该接口中只有一个待实现方法。</p>
+<p><strong>凡是这种只有一个待实现方法的接口，都可以使用Lambda表达式的写法。</strong></p>
+<p>接下啦我们尝试自定义一个接口，然后再使用Lambda表达式的方式进行实现：</p>
+<pre><code>public interface MyListener
+{
+    String doSomething(String a,int b);
+}
+</code></pre>
+<p>MyListener接口中也只有一个待实现方法，这和Runnable接口的结构是基本一致的。唯一不同的是，MyListener中的doSomething()方法是有参数并且有返回值的。</p>
+<p>另外，Java还可以根据上下文自动推断出Lambda表达式中的参数类型，上面的也可以简化为：</p>
+<pre><code> MyListener listener1 = (a,b) -&gt;
+    {
+        String result = a + b;
+        return result;
+    };
+</code></pre>
+<p><strong>在Android中的应用：</strong></p>
+<pre><code> button = (Button) findViewById(R.id.button);
+    button.setOnClickListener(new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View v)
+        {
+           //处理点击事件
+        }
+    });
+</code></pre>
+<p>使用Lambda后表达式后为：</p>
+<pre><code>button = (Button) findViewById(R.id.button);
+    button.setOnClickListener((v) -&gt;
+    {
+        //处理点击事件
+    });
+</code></pre>
+<p>另外，当接口的待实现方法有且只有一个参数的时候，还可以进一步简化</p>
+<pre><code> button = (Button) findViewById(R.id.button);
+    button.setOnClickListener(v -&gt;
+    {
+        //处理点击事件
+    });
+</code></pre>
+<h1 id="8-gradleapk"><a name="user-content-8-gradleapk" href="#8-gradleapk" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>8. 使用Gradle生成正式签名的APK</h1>
+<p>1.在Android Studio 根目录下有一个gradle.properties文件,它是用来专门配置全局键值对数据的,在该文件中添加如下数据:</p>
+<pre><code>KEY_PATH=C:User/xfhy.jks
+KEY_PASS=123456
+ALIAS_NAME=xfhy
+ALIAS_PASS=123456
+</code></pre>
+<p>2.在app/build.gradle中的android闭包中添加如下内容:</p>
+<pre><code>signingConfigs {
+    config {
+        storeFile file(KEY_PATH)
+        storePassword KEY_PASS
+        keyAlias ALIAS_NAME
+        keyPassword ALIAS_PASS
+    }
+}
+buildTypes {
+    release {
+        ...
+        signingConfig signingConfigs.config
+    }
+}
+</code></pre>
+<p>3.点击右侧工程栏的Gradle-&gt;项目名-&gt;:app-&gt;Tasks-&gt;build.在生成APK之前,先要双击clean这个Task来清理一下当前项目,<br />
+然后双击assembleRelease.</p>
+<p><strong>需要将gradle.properties文件保护好,比如说将它从Git版本库中排除</strong></p></article></body></html>

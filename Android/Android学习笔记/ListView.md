@@ -31,6 +31,10 @@
 
 ****************第一行代码   书里面的
 
+> convertView
+> ViewHolder
+> view.setTag()
+
 		public View getView(int position, View convertView, ViewGroup parent) {
 		Fruit fruit = getItem(position); // 首先获得当前项的Fruit实例
 		// 加载传入的布局

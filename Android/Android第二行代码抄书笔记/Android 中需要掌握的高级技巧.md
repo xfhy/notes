@@ -441,3 +441,41 @@ MyListener接口中也只有一个待实现方法，这和Runnable接口的结�
         {
             //处理点击事件
         });
+
+# 8. 使用Gradle生成正式签名的APK
+
+1.在Android Studio 根目录下有一个gradle.properties文件,它是用来专门配置全局键值对数据的,在该文件中添加如下数据:
+
+	KEY_PATH=C:User/xfhy.jks
+	KEY_PASS=123456
+	ALIAS_NAME=xfhy
+	ALIAS_PASS=123456
+
+2.在app/build.gradle中的android闭包中添加如下内容:
+
+	signingConfigs {
+		config {
+			storeFile file(KEY_PATH)
+			storePassword KEY_PASS
+			keyAlias ALIAS_NAME
+			keyPassword ALIAS_PASS
+		}
+	}
+	buildTypes {
+		release {
+			...
+			signingConfig signingConfigs.config
+		}
+	}
+
+3.点击右侧工程栏的Gradle->项目名->:app->Tasks->build.在生成APK之前,先要双击clean这个Task来清理一下当前项目,
+然后双击assembleRelease.
+
+**需要将gradle.properties文件保护好,比如说将它从Git版本库中排除**
+
+# 9. for循环简单优化
+
+	int length = list.size();
+	for(int i=0; i<length; i++){
+		syso("你好");
+	}
