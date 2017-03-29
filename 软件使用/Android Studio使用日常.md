@@ -42,6 +42,8 @@
 
  - `alt+home` 导航栏
 
+ - `Ctrl+P` 显示所选方法的参数
+
 # 2.Logcat使用
 
 >打开 `LogCat`在搜索框右侧的`No Filters`中选择 `Edit Filter Configuration`选项,然后在`Name`中输入过滤器的名称，在`by Package Name`中输入你的应用的`Package Name`就可以了。然后在搜索框右侧的过滤器选项中选择你刚选择过滤器就可以了。
@@ -91,3 +93,33 @@
 
 - src/main/jniLibs  这里是专门用来存放so文件的
 
+# 9. 在Android Studio中使用实时模板
+
+- newInstance - 在Fragment中生成静态newInstance函数
+- Toast - 生成 Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+- fbc - 写出findViewById并cast
+- const - 定义一个android风格的int常量
+- logd - 生成 Log.d(TAG, "");
+- logm - 记录当前方法名称及其参数
+- logr - 当前方法的result结果
+- logt - 静态logtaf与当前类名
+- psf - public static final
+- sout - 将字符串打印到System.out
+- soutm - 将当前类和方法名称打印到System.out
+- soutp - 将方法参数名称和值打印到System.out
+- visible - Set view visibility to VISIBLE
+- gone - Set view visibility to GONE
+- noInstance - 私有空构造函数来禁止实例创建
+
+# 10. 后缀代码在Android Studio中完成
+
+  + `<expr>.null` will auto complete to `if(<expr> == null)`
+  + `<expr>.nootnull` will auto complete to `if(<expr> != null)`
+  + `<expr>.var` will auto complete to `T name = <expr>`
+  + `<expr>.field` will auto complete to create a global field variable `field = <expr>`
+  + `<ArrayExpr>.for` will auto complete to `for(T item : <Arrayexpr>)`
+  + `<ArrayExpr>.fori` will auto complete to `for(int i = 0; i < <Arrayexpr>.length; i++)`
+  + `<ArrayExpr>.forr` will auto complete to `for(int i = <Arrayexpr>.length - 1; i > 0 ; i--)`
+
+
+Complete list of available postfix code completion can be found at **Settings** → **Editor** → **Postfix Templates**

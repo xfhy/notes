@@ -141,3 +141,365 @@ VIewGroup在测量时会通过遍历所有子View，从而调用子View的Measur
         //在回调方法后,实现自己的逻辑,对TextView来说是在绘制文本内容后
         canvas.restore();   //回滚
     }
+
+### 5.2 闪动文字效果
+
+	public class FlashingTextView extends TextView {
+
+	  private int mViewWidth = 0;
+	  private Paint mPaint;
+	  private LinearGradient mLinearGradient;
+	  private Matrix mGradientMatrix;
+	  private int mTranslate;
+
+	  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+	    super.onSizeChanged(w, h, oldw, oldh);
+	    if (mViewWidth == 0) {
+	      mViewWidth = getMeasuredWidth();
+	      if (mViewWidth > 0) {
+	        mPaint = getPaint();
+	        mLinearGradient = new LinearGradient(
+	            0,
+	            0,
+	            mViewWidth,
+	            0,
+	            new int[] {
+	                Color.BLUE, 0xffffffff,
+	                Color.BLUE
+	            },
+	            null,
+	            Shader.TileMode.CLAMP);
+	        mPaint.setShader(mLinearGradient);
+	        mGradientMatrix = new Matrix();
+	      }
+	    }
+	  }
+	
+	  @Override protected void onDraw(Canvas canvas) {
+	    super.onDraw(canvas);
+	    if (mGradientMatrix != null) {
+	      mTranslate += mViewWidth/5;
+	      if(mTranslate>2*mViewWidth){
+	        mTranslate = -mViewWidth;
+	      }
+	      mGradientMatrix.setTranslate(mTranslate,0);
+	      mLinearGradient.setLocalMatrix(mGradientMatrix);
+	      postInvalidateDelayed(300);
+	    }
+	  }
+	}
+
+## 6. 创建复合控件
+
+> 创建复合控件可以很好地创建出具有重用功能的控件集合。这种方式通常需要继承一个合适的ViewGroup，再给它添加指定功能的控件，从而组合成新的复合控件。通过这种方式创建的控件，我们一般会给它指定一些可配置的属性，让它具有更强的拓展性。下面就以一个TopBar为示例，讲解如何创建复合控件。
+
+### 6.1 定义属性
+
+为一个View提供可自定义的属性非常简单，只需要在res资源目录的values目录下创建一个attrs.xml的属性定义文件，并在该文件中通过如下代码定义相应的属性即可。
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+	
+	  <declare-styleable name="TopBar">
+	    <!--fornat属性用来指定属性的类型
+	      dimension表示大小
+	      reference引用属性
+	      color是颜色
+	      -->
+	    <attr name="_title" format="string"/>
+	    <attr name="_titleTextSize" format="dimension"/>
+	    <attr name="_titleTextColor" format="color"/>
+	    <attr name="leftTextColor" format="color"/>
+	    <attr name="leftBackground" format="reference|color"/>
+	    <attr name="leftText" format="string"/>
+	    <attr name="rightTextColor" format="color"/>
+	    <attr name="rightBackground" format="reference|color"/>
+	    <attr name="rightText" format="string"/>
+	  </declare-styleable>
+	
+	</resources>
+
+我们在代码中通过标签声明了使用自定义属性，并通过name属性来确定引用的名称。最后，通过标签来声明具体的自定义属性，比如在这里定义了标题文字的字体、大小、颜色，左边按钮的文字颜色、背景、字体.
+
+在确定好属性后，就可以创建一个自定义控件—-TopBar，并让它继承自ViewGroup，从而组合一些需要的控件。这里为了简单，我们继承RelativeLayout。在构造方法中，通过如下所示代码来获取XML布局文件中自定义的那些属性，即与我们使用系统提供的那些属性一样.
+
+	// 通过这个方法，将你在attrs.xml中定义的declare-styleable的所有属性值存储到TypedArray中
+	TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TopBar);
+	// 从TypedArray中取出对应的值来为要设置的属性赋值
+	mLeftTextColor = ta.getColor(R.styleable.TopBar_leftTextColor, 0);
+	mLeftBackground = ta.getDrawable(R.styleable.TopBar_leftBackground);
+	mLeftText = ta.getString(R.styleable.TopBar_leftText);
+	mRightTextColor = ta.getColor(R.styleable.TopBar_rightTextColor, 0);
+	mRightBackground = ta.getDrawable(R.styleable.TopBar_rightBackground);
+	mRightText = ta.getString(R.styleable.TopBar_rightText);
+	mTitleTextSize = ta.getDimension(R.styleable.TopBar__titleTextSize, 10);
+	mTitleTextColor = ta.getColor(R.styleable.TopBar__titleTextColor, 0);
+	mTitle = ta.getString(R.styleable.TopBar__title);
+	// 获取完TypedArray的值后，一般要调用recycle方法来避免重新创建时的错误
+	ta.recycle();
+
+## 6.2 组合控件
+
+> 接下来，我们就可以开始组合控件了。UI模板TopBar实际上由三个控件组成，即左边的点击按钮mLeftButton，右边的点击按钮mRightButton和中间的标题栏mTitleView。通过动态添加控件的方式，使用addView()方法将这三个控件加入到定义的TopBar模板中，并给它们设置我们前面所获取到的具体的属性值，比如标题的文字颜色、大小等，代码如下所示。
+
+下面是代码,放在构造方法里面的,上面的代码之后.
+
+	// 为创建的组件元素赋值
+	// 值就来源于我们在引用的xml文件中给对应属性的赋值
+	mLeftButton.setTextColor(mLeftTextColor);
+	mLeftButton.setBackground(mLeftBackground);
+	mLeftButton.setText(mLeftText);
+	 
+	mRightButton.setTextColor(mRightTextColor);
+	mRightButton.setBackground(mRightBackground);
+	mRightButton.setText(mRightText);
+	 
+	mTitleView.setText(mTitle);
+	mTitleView.setTextColor(mTitleTextColor);
+	mTitleView.setTextSize(mTitleTextSize);
+	mTitleView.setGravity(Gravity.CENTER);
+	 
+	// 为组件元素设置相应的布局元素
+	mLeftLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+	mLeftLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, TRUE);
+	// 添加到ViewGroup
+	addView(mLeftButton, mLeftLayoutParams);
+	 
+	mRightLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+	mRightLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, TRUE);
+	addView(mRightButton, mRightLayoutParams);
+	 
+	mTitleLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+	mTitleLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, TRUE);
+	addView(mTitleView, mTitleLayoutParams);
+
+**定义接口**
+
+在UI模板类中定义一个左右按钮点击的接口，并创建两个方法，分别用于左边按钮的点击和右边按钮的点击，代码如下所示。
+
+**暴露接口给调用者**
+
+在模板方法中，为左、右按钮增加点击事件，但不去实现具体的逻辑，而是调用接口中相应的点击方法，代码如下所示。
+
+	// 按钮的点击事件，不需要具体的实现，
+	// 只需调用接口的方法，回调的时候，会有具体的实现
+	mRightButton.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+	        mListener.rightClick();
+	    }
+	});
+	mLeftButton.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+	        mListener.leftClick();
+	    }
+	});
+	 
+	// 暴露一个方法给调用者来注册接口回调
+	// 通过接口来获得回调者对接口方法的实现
+	public void setOnTopbarClickListener(topbarClickListener mListener) {
+	    this.mListener = mListener;
+	}
+
+**实现接口回调**
+
+在调用者的代码中，调用者需要实现这样一个接口，并完成接口中的方法，确定具体的实现逻辑，并使用第二步中暴露的方法，将接口的对象传递进去，从而完成回调。通常情况下，可以使用匿名内部类的形式来实现接口中的方法，代码如下所示。
+
+	mTopBar.setOnTopbarClickListener(new MyTopBar.topbarClickListener() {
+	    @Override
+	    public void leftClick() {
+	        Toast.makeText(MainActivity.this,
+	                "left", Toast.LENGTH_SHORT)
+	                .show();
+	    }
+	    @Override
+	    public void rightClick() {
+	        Toast.makeText(MainActivity.this,
+	                "right", Toast.LENGTH_SHORT)
+	                .show();
+	    }
+	});
+
+这里为了简单演示，只显示两个Toast来区分不同的按钮点击事件。除了通过接口回调的方式来实现动态的控制UI模板，同样可以使用公共方法来动态地修改UI模板中的UI，这样就进一步提高了模板的可定制性，代码如下所示。
+
+	/**
+	* 设置按钮的显示与否 通过id区分按钮，flag区分是否显示
+	*
+	* @param id   id
+	* @param flag 是否显示
+	*/
+	public void setButtonVisable(int id, boolean flag) {
+	    if (flag) {
+	        if (id == 0) {
+	            mLeftButton.setVisibility(View.VISIBLE);
+	        } else {
+	            mRightButton.setVisibility(View.VISIBLE);
+	        }
+	    } else {
+	        if (id == 0) {
+	            mLeftButton.setVisibility(View.GONE);
+	        } else {
+	            mRightButton.setVisibility(View.GONE);
+	        }
+	    }
+	}
+
+**引用UI模板**
+
+最后一步，自然是在需要使用的地方引用UI模板，在引用前，需要指定引用第三方控件的名字空间。
+
+	xmlns:custom="http://schemas.android.com/apk/res-auto"
+
+如果将这个UI模板写到一个布局文件中，代码如下所示。
+
+	<com.xfhy.viewmeasuretest.TopBar
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:app="http://schemas.android.com/apk/res-auto"
+	    app:rightTextColor="@color/colorPrimary"
+	    app:rightBackground="@color/colorXfhy"
+	    app:rightText="编辑"
+	    app:leftTextColor="@color/colorPrimary"
+	    app:leftBackground="@color/colorXfhy"
+	    app:leftText="返回"
+	    app:_titleTextSize="20sp"
+	    app:_titleTextColor="@color/colorPrimary"
+	    android:id="@+id/tb_bar"
+	    android:layout_below="@id/ft"
+	    android:layout_marginTop="10dp"
+	    app:_title="标题"
+	    android:layout_width="match_parent"
+	    android:layout_height="50dp"
+	    android:background="@color/colorAccent">
+	
+	</com.xfhy.viewmeasuretest.TopBar>
+
+通过如上所示的代码，我们就可以在其他的布局文件中，直接通过标签来引用这个UI模板View，代码如下所示。
+
+	<include layout="@layout/widget_topbar"/>
+
+## 7. 实现弧线展示图
+
+
+
+	public class ArcDisplay extends View {
+
+	  /**
+	   * 绘制内部圆需要的成员变量
+	   */
+	  private Paint mCirclePaint;
+	  private float mCenter;
+	  private float mInsideRadius;
+	  /**
+	   * 绘制外面弧度所需要的成员变量
+	   */
+	  private Paint mArcPaint;
+	  private RectF mArcRectF;
+	  private float mSweepAngle = 90;
+	  /**
+	   * 绘制中间Text
+	   */
+	  private Paint mTextPaint;
+	  private String mShowText;
+	  private float mShowTextSize;
+	  private int mWidth;
+	  private int mHeight;
+	
+	  @Override protected void onDraw(Canvas canvas) {
+	    super.onDraw(canvas);
+	    // 绘制圆
+	    canvas.drawCircle(mCenter, mCenter, mInsideRadius, mCirclePaint);
+	    // 绘制弧线
+	    /**
+	     * oval：用于定义圆弧形状和大小的椭圆形边界
+	     startAngle float：弧开始的起始角度（以度为单位）
+	     sweepAngle float：顺时针测量的扫描角度（以度为单位）
+	     useCenter boolean：如果为true，请在圆弧中包含椭圆的中心，如果正在进行描边，则将其关闭。 这会画一个楔子
+	     paint：油漆用来画弧
+	     */
+	    canvas.drawArc(mArcRectF, -90, mSweepAngle, false, mArcPaint);
+	    // 绘制文字
+	    canvas.drawText(mShowText, 0, mShowText.length(),
+	        mCenter, mCenter + (mShowTextSize / 4), mTextPaint);
+	  }
+	
+	  /**
+	   * 当这个视图的大小改变时，这在布局期间被调用。 如果您刚刚添加到视图层次结构中，则调用旧值0。
+	   * @param w
+	   * @param h
+	   * @param oldw
+	   * @param oldh
+	   */
+	  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+	    super.onSizeChanged(w, h, oldw, oldh);
+	    mWidth = getMeasuredWidth();
+	    mHeight = getMeasuredHeight();
+	    this.initView();
+	  }
+	
+	  /**
+	   * 初始化布局
+	   */
+	  private void initView() {
+	    float length = Math.min(mWidth,mHeight);
+	
+	    mCenter = length/2;  //中间的圆的中点坐标
+	    mInsideRadius = (float) (length*0.5/2);
+	    mCirclePaint = new Paint();
+	    mCirclePaint.setAntiAlias(true);
+	    //getColor(int) api 23之后应该是被  int getColor (int id,Resources.Theme theme)代替
+	    mCirclePaint.setColor(getResources().getColor(android.R.color.holo_blue_bright));
+	
+	    //绘制外层的弧
+	    mArcRectF = new RectF(
+	        (float) (length * 0.1), (float) (length * 0.1),
+	        (float) (length * 0.9), (float) (length * 0.9));
+	
+	    mArcPaint = new Paint();
+	    mArcPaint.setAntiAlias(true);
+	    mArcPaint.setColor(getResources().getColor(android.R.color.holo_blue_bright));
+	    mArcPaint.setStrokeWidth((float) (length * 0.05));
+	    mArcPaint.setStyle(Paint.Style.STROKE);
+	
+	        /*中间显示的文字*/
+	    mShowText = setShowText();
+	    mShowTextSize = setShowTextSize();
+	    mTextPaint = new Paint();
+	    mTextPaint.setTextSize(mShowTextSize);
+	    mTextPaint.setTextAlign(Paint.Align.CENTER);
+	
+	  }
+	
+	  private float setShowTextSize() {
+	    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,20,getResources().getDisplayMetrics());
+	  }
+	
+	  private String setShowText() {
+	    return "Android Skill";
+	  }
+	
+	  /**
+	   * 通知View进行重绘
+	   */
+	  public void forceInvalidate() {
+	    this.invalidate();
+	  }
+	
+	  /**
+	   * 设置顺时针测量的扫描角度（以度为单位）
+	   * @param sweepValue
+	   */
+	  public void setSweepValue(float sweepValue) {
+	    if (sweepValue >= 0) {
+	      mSweepAngle = sweepValue;
+	    } else {
+	      mSweepAngle = 90;
+	    }
+	    this.invalidate();
+	  }
+	
+	}
+
+## 8. 音频条形图
+
+
