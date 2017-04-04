@@ -97,6 +97,36 @@
 1. 使用Fragment必须重写onCreateView方法
 2. 还可以重写一个ondestroy方法 做一些收尾的工作
 
+![](http://olg7c0d2n.bkt.clouddn.com/17-3-31/5147490-file_1490963970861_132ae.png)
+
+被称为使片段恢复恢复状态（与用户进行交互）的核心系列生命周期方法有：
+
+- onAttach(Activity)一旦该片段与其活动相关联，就会调用onAttach（Activity）。
+
+- onCreate（Bundle）被调用来创建片段的初始化。
+
+- onCreateView（LayoutInflater，ViewGroup，Bundle）创建并返回与片段相关联的视图层次结构。
+
+- onActivityCreated（Bundle）告诉片段其活动已经完成了自己的Activity.onCreate（）。
+
+- onViewStateRestored（Bundle）告诉片段其视图层次结构的所有保存状态已被还原。
+
+- onStart（）使该片段对用户可见（基于其包含的活动正在启动）。
+
+- onResume（）使片段开始与用户进行交互（基于其包含的活动正在恢复）。
+
+由于片段不再被使用，所以它经历了一系列相反的回调：
+
+- 因为onPause（）片段不再与用户进行交互，因为它的活动正在暂停或片段操作在活动中进行修改。
+
+- 因为onStop（）片段不再对用户可见，因为它的活动正在停止，或者片段操作在活动中修改它。
+
+- onDestroyView（）允许片段清理与其View相关联的资源。
+
+- onDestroy（）被调用来做最后的清理片段的状态。
+
+- onDetach（）在片段之前立即调用不再与其活动相关联。
+
 # 6.fragment之间的通信
 >Fragment有一个公共的桥梁 Activity
 
@@ -131,3 +161,17 @@ Android中 常见限定符:
 # 9. 关于ActionBar和Toolbar
 
 **这里最好是自己定义标题栏,是因为Fragment中最好不要直接使用ActionBar或Toolbar,不然在复用的时候可能会出现一些你不想看到的效果.**
+
+
+# 官方文档
+
+通常，您至少应实现以下生命周期方法：
+
+**onCreate()**
+系统会在创建片段时调用此方法。您应该在实现内初始化您想在片段暂停或停止后恢复时保留的必需片段组件。
+
+**onCreateView()**
+系统会在片段首次绘制其用户界面时调用此方法。 要想为您的片段绘制 UI，您从此方法中返回的 View 必须是片段布局的根视图。如果片段未提供 UI，您可以返回 null。
+
+**onPause()**
+系统将此方法作为用户离开片段的第一个信号（但并不总是意味着此片段会被销毁）进行调用。 您通常应该在此方法内确认在当前用户会话结束后仍然有效的任何更改（因为用户可能不会返回）。

@@ -212,7 +212,7 @@
 
 # 5. 创建定时任务
 
-> Android中的定时任务一般有两种实现方式，一种是使用Java API里提供的Timer类，一种是使用Android的Alarm机制。这两种方式在多数情况下都能实现类似的效果，但Timer有一个明显的短板，它并不太适用于那些需要长期在后台运行的定时任务。我么都知道为了能让电池更加耐用，每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm则具有唤醒CPU的功能，它可以保证在大多数情况下需要执行定时任务的时候CPU都能正常工作。需要注意: 这里唤醒CPU和唤醒屏幕完全不是一个概念，千万不要产生混淆。
+> Android中的定时任务一般有两种实现方式，一种是使用Java API里提供的Timer类，一种是使用Android的Alarm机制。这两种方式在多数情况下都能实现类似的效果，但Timer有一个明显的短板，它并不太适用于那些需要长期在后台运行的定时任务。我们都知道为了能让电池更加耐用，每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm则具有唤醒CPU的功能，它可以保证在大多数情况下需要执行定时任务的时候CPU都能正常工作。需要注意: 这里唤醒CPU和唤醒屏幕完全不是一个概念，千万不要产生混淆。
 
 ## 5.1 Alarm机制
 
@@ -285,6 +285,27 @@
 注意其中的最后一条，也就是说，在Doze模式下，我们的Alarm任务将会变得不准时。当然，这在大多数情况下都是合理的，因为只有当用户长时间不使用手机的时候才会进入Doze模式，通常在这种情况下对Alarm任务的准时性要求并没有那么高。
 
 不过，如果你真的有非常特殊的需求，要求Alarm任务即使在Doze模式下也必须正常执行，Android还是提供了解决方案。调用AlarmManager的setAndAllowWhileIdle()或setExactAndAllowWhileIdle()方法就能让定时任务即使在Doze模式下也能正常执行了，这两个方法之间的区别和set(),setExact()方法之间的区别是一样的。
+
+## 5.3 使用Handler的postDelayed(Runnable, long)方法
+
+1.
+
+	Handler handler=new Handler();
+	Runnable runnable=new Runnable(){
+		@Override
+		public void run() {
+		// TODO Auto-generated method stub
+		//要做的事情
+		handler.postDelayed(this, 2000);
+		}
+	};
+
+
+2.启动计时器：
+`handler.postDelayed(runnable, 2000);//每两秒执行一次runnable.`
+
+3.停止计时器：
+`handler.removeCallbacks(runnable);`
 
 # 6. 多窗口模式编程
 

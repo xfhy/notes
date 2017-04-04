@@ -1,0 +1,40 @@
+QQ:836959067 请备注期号和姓名
+
+翻墙
+https://github.com/goagent/goagent
+
+开源项目源码分析:
+http://www.codekk.com/open-source-project-analysis
+
+Android资源下载网站
+http://www.androiddevtools.cn/
+
+开源项目网站
+https://github.com/Trinea/android-open-project
+http://www.23code.com/
+http://www.godcoder.com/
+
+Android源码搜索：
+http://androidxref.com/
+
+布局资源代码生成：
+http://android.lineten.net/layout.php
+
+Fragment代码生成：
+http://www.andreamaglie.com/android-fragment-generator/index.html
+
+Android属性动画：
+http://bbs.itheima.com/thread-172632-1-1.html
+
+Android 编程下 Touch 事件的分发和消费机制
+http://www.cnblogs.com/sunzn/archive/2013/05/10/3064129.html
+
+抓包工具
+Fiddler
+
+----------------------------------------------
+开源代码360云盘
+http://yunpan.cn/cJ7P8zEGgJGST  访问密码 4d58
+----------------------------------------------
+
+Github：PoplarTang

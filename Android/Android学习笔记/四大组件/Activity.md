@@ -131,4 +131,6 @@
 Activity中还提供了一个onSaveInstanceState()回调方法.这个方法可以保证在活动被回收之前一定会被调用,因此我们可以通过这个方法来
 解决活动被回收时临时数据得不到保存的问题.然后在onCreate()中通过Bundle对象来取数据,注意判断是否为null.
 
-# 8. 
+# 官方API介绍
+
+# 8. 一般一个Activity需要重写onCreate()和onPause()方法,onPause()是您处理用户离开你的活动。最重要的是，用户所做的任何更改应该在这一点上（通常在致力于 ContentProvider保持数据）。
