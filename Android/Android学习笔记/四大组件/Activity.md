@@ -19,6 +19,20 @@
 				setResult(10, intent);
 				//关闭当前页面  
 				finish();
+		3.然后需要在调用者中写到
+		@Override
+		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+			// 如果是用户按下的确定之后才返回到这里 而不是按返回键到这里
+			if (resultCode == Activity.RESULT_OK) {
+				switch (requestCode) {
+				case SECOND_ACTIVITY_CODE:
+					tv_second_info.setText(data.getStringExtra("info"));
+					break;
+				default:
+					break;
+				}
+			}
+		}
 
 #3.Activity的生命周期 (必须掌握)
 

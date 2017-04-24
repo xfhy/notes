@@ -108,6 +108,24 @@
      上获取最新的代码并且合并到本地,用法如下:
         `git pull origin master `
 
+## 12.删除错误提交的commit
+
+方法:
+1.先git log查看最近一次正确的commit_id
+2.输入一下命令
+
+	git reset --hard <commit_id>
+    git push origin HEAD --force
+
+ git reset –hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容.
+
+HEAD 最近一个提交
+
+HEAD^ 上一次
+
+<commit_id>  每次commit的SHA1值. 可以用git log 看到,也可以在页面上commit标签页里找到.
+
+
 
 
 

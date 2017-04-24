@@ -32,7 +32,9 @@
 ****************第一行代码   书里面的
 
 > convertView
+
 > ViewHolder
+
 > view.setTag()
 
 		public View getView(int position, View convertView, ViewGroup parent) {
