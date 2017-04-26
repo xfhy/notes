@@ -103,7 +103,7 @@
 - logm - 记录当前方法名称及其参数
 - logr - 当前方法的result结果
 - logt - 静态logtaf与当前类名
-- psf - public static final
+- **psf** - public static final
 - sout - 将字符串打印到System.out
 - soutm - 将当前类和方法名称打印到System.out
 - soutp - 将方法参数名称和值打印到System.out
