@@ -131,7 +131,3 @@
 		public void doFailSomething(){
 		    Toast.makeText(this, "Contact permission is not granted", t.LENGTH_SHORT).show();
 		}
-
-# 4. TextView默认是没有点击事件的
-
-当给TextView设置selector的时候,默认是不能被点击的,需要先设置TextView的setOnClickListener事件才能被点击,背景才会被切换
