@@ -42,7 +42,7 @@ public int hashCode() {
 	final int PRIME1 = 13; //这里最好是定义成类的属性,最好是素数
 	final int PRIME2 = 17;
 	…
-	int result= 1；
+	int result= 1;
 	result = PRIME1 * property1;
 	result += PRIMER2 * property2;
 	return result;
