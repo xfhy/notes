@@ -195,7 +195,70 @@ toast_view.xml
 
 模仿Toast里面的写法,写出上面的showToast()方法,用于显示自定义的Toast.
 
-# 四.遇到的坑
+# 四.自定义Toast支持拖动
+
+	//触摸监听
+		mRocketView.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN: // 按下
+					// 1, 获取控件开始时的xy
+					startX = (int) event.getRawX();
+					startY = (int) event.getRawY();
+					break;
+				case MotionEvent.ACTION_MOVE: // 移动
+					// 2, 获取控件移动过程中的xy值
+					int moveX = (int) event.getRawX();
+					int moveY = (int) event.getRawY();
+
+					// 3, 当前位置和初始位置的X距离和Y距离
+					int disX = moveX - startX;
+					int disY = moveY - startY;
+
+					// 4, 控件的位置需要移动到移动之后的那个位置
+					mParams.x = mParams.x + disX;
+					mParams.y = mParams.y + disY;
+
+					// 5, 容错,不允许Toast拖拽出屏幕区域
+					if (mParams.x < 0) { // 左边区域 最小就为0
+						mParams.x = 0;
+					}
+
+					if (mParams.y < 0) {
+						mParams.y = 0;
+					}
+
+					if (mParams.x > mScreenWidth - mRocketView.getWidth()) {
+						// 右边,最多能拖到屏幕宽度-控件宽度的位置
+						mParams.x = mScreenWidth - mRocketView.getWidth();
+					}
+
+					if (mParams.y > mScreenHeight - 22 - mRocketView.getHeight()) {
+						// 下边,最多能拖到屏幕高度-状态栏高度-控件高度的位置
+						mParams.y = mScreenHeight - 22 - mRocketView.getHeight();
+					}
+
+					// 6, 更新控件 刷新显示
+					mWM.updateViewLayout(mRocketView, mParams);
+
+					startX = (int) event.getRawX();
+					startY = (int) event.getRawY();
+					
+					break;
+				case MotionEvent.ACTION_UP: // 抬起
+					break;
+				default:
+					break;
+				}
+
+				// 8, 消费了事件,则返回true
+				return true;
+			}
+		});
+
+# 五.遇到的坑
 当运行在23之上的时候,不仅需要在清单文件中写入
 `<uses-permission android:name="android.permission
 .SYSTEM_ALERT_WINDOW"/>`但是仅仅这样还不行,还会报下面的错
@@ -203,6 +266,6 @@ toast_view.xml
 permission denied for window type 2002`
 现在需要像下面一样判断一下,如果没有权限,则需要用户跳转到相应的界面去给权限才行
 
-# 五.总结
+# 六.总结
 
 上面的Service是用于监听当电话打入时,显示一个自定义的Toast,当电话挂断时,自定义Toast就取消显示.相当于是Toast可以显示很久很久(只要是电话没挂),而且还会显示在Toast之上.

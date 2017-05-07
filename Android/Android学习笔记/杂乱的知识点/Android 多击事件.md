@@ -8,28 +8,31 @@
 
 	public class MainActivity extends Activity implements OnClickListener {
 
-	private ImageView iv_girl;
-	private long mHits[] = new long[5];
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-
-		iv_girl = (ImageView) findViewById(R.id.iv_girl);
-		iv_girl.setOnClickListener(this);
-
-	}
-
-	@Override
-	public void onClick(View v) {
-		
-		System.arraycopy(mHits, 1, mHits, 0, mHits.length-1);
-		mHits[mHits.length-1] = System.currentTimeMillis();
-		if(mHits[mHits.length-1]-mHits[0]<500){
-			Toast.makeText(this, "果然是真男人!!!!!!\n送你一张美图", Toast.LENGTH_SHORT).show();
+		private ImageView iv_girl;
+		private long mHits[] = new long[5];
+	
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_main);
+	
+			iv_girl = (ImageView) findViewById(R.id.iv_girl);
+			iv_girl.setOnClickListener(this);
+	
 		}
+	
+		@Override
+		public void onClick(View v) {
+			
+			System.arraycopy(mHits, 1, mHits, 0, mHits.length-1);
+			mHits[mHits.length-1] = SystemClock.uptimeMillis();
+			if(mHits[mHits.length-1]-mHits[0]<500){
+				Toast.makeText(this, "果然是真男人!!!!!!\n送你一张美图", Toast.LENGTH_SHORT).show();
+			}
+		}
+	
 	}
 
-}
 
+如图:
+![](http://olg7c0d2n.bkt.clouddn.com/17-5-3/22588509-file_1493779116748_153bc.png)
