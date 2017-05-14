@@ -44,6 +44,14 @@
 
  - `Ctrl+P` 显示所选方法的参数
 
+ - `Ctrl+ -`快速折叠当前的代码块
+
+ - `Ctrl+ +`快速展开当前折叠的代码块
+
+ - `Ctrl+Shift+ -` 快速折叠所有代码
+
+ -  `Ctrl+Shift+ +`  快速展开所有折叠的代码
+
 # 2.Logcat使用
 
 >打开 `LogCat`在搜索框右侧的`No Filters`中选择 `Edit Filter Configuration`选项,然后在`Name`中输入过滤器的名称，在`by Package Name`中输入你的应用的`Package Name`就可以了。然后在搜索框右侧的过滤器选项中选择你刚选择过滤器就可以了。

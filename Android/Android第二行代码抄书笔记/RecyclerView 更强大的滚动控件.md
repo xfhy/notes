@@ -401,6 +401,87 @@
 	mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
 	DividerItemDecoration.VERTICAL_LIST));
 
+# 6.滑动加载更多
+
+		//创建LayoutManager对象,并设置给RecyclerView
+        mLayoutManager = new LinearLayoutManager(this);
+        rv_blacknumber.setLayoutManager(mLayoutManager);
+
+		/*
+           创建滑动监听器
+        * 对于RecyclerView的滚动监听
+        * */
+        mbBlNumScrollListener = new BlNumScrollListener();
+        rv_blacknumber.addOnScrollListener(mbBlNumScrollListener);
+	
+	/**
+     * RecyclerView滑动状态监听器
+     */
+    class BlNumScrollListener extends RecyclerView.OnScrollListener {
+        //滑动状态发生改变
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            /*
+                newState - 所有的RecyclerView的滑动状态
+             *   SCROLL_STATE_IDLE       空闲状态
+             *   SCROLL_STATE_DRAGGING   正在被手指拖动滑动
+             *   SCROLL_STATE_SETTLING.  飞速滑动,手指飞速滑了一下,然后列表还在飞速的滚动中,这时候手指已离开屏幕
+             */
+
+            //1, 判断是否合法   如果列表为空,下面的都没有执行的意义了
+            if (mBlackNumberList == null) {
+                return;
+            }
+
+            /*
+            * 2, 判断当前用户是否需要加载数据:
+                * a, 是否处于空闲状态
+                * b, 当前RecyclerView的最后一项是否可见
+                * c, 当前是否处于正在加载的状态(防止重复加载)
+            *
+            * 如果当前正在加载mIsLoad就会为true,本次加载完毕后,再将isLoad改为false
+						如果下一次加载需要去做执行的时候,会判断上诉mIsLoad变量,是否为false,如果为true,
+						就需要等待上一次加载完成,将其值
+						改为false后再去加载
+            * */
+            if (newState == RecyclerView.SCROLL_STATE_IDLE
+                    && mLayoutManager.findLastVisibleItemPosition() >= (mBlackNumberList.size() - 1)
+                    && !isLoad) {
+
+                //3, 获取数据库中的黑名单数量 知道是否还可以加载更多
+                // 如果数据库中的数目大于当前集合的条目则去加载
+                if (mCount > mBlackNumberList.size()) {
+                    isLoad = true;
+                    ToastUtil.show("加载更多");
+
+                    //4, 开一个子线程,去数据库查询黑名单数据   部分查询
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //2, 获取到DAO
+                            mDao = BlackNumberDao.getInstance(mContext);
+                            //3, 查询黑名单部分数据
+                            List<BlackNumberInfo> moreData = mDao.find(mBlackNumberList
+                                    .size());
+                            mBlackNumberList.addAll(moreData);  //将这次查询的数据加到集合末尾
+
+                            //4, 发送给主线程一个  查找黑名单  完成的消息
+                            Message msg = Message.obtain();
+                            msg.what = FIND_NUMBER_FINISHED;
+                            mHandler.sendMessage(msg);
+                        }
+                    }).start();
+                }
+
+            }
+        }
+
+        //正在滑动
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    }
 
 # 坑点
 

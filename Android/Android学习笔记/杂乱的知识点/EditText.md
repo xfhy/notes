@@ -67,3 +67,7 @@ setOnEditorActionListener: 键盘回车事件
 
 	Animation shake = AnimationUtils.loadAnimation(QueryAddressActivity.this, R.anim.shake);
     etQueryPhone.startAnimation(shake);
+
+## 4. 光标在最前面
+
+属性加上`android:gravity="top"`
