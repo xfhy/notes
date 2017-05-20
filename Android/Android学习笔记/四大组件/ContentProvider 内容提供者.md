@@ -400,3 +400,17 @@ ContentProvider则在其他的应用程序也可以根据标准来进行第一�
 	
 		}
 3. 应用场景:短信监听器
+
+# 应用:读取系统通话记录数据库
+
+当需要读取通话记录的时候,需要用到系统的数据库,现在需要去查看源码,看到
+
+	<provider android:name="CallLogProvider"
+	            android:authorities="call_log"
+	            android:syncable="false" android:multiprocess="false"
+	            android:exported="true"
+	            android:readPermission="android.permission.READ_CALL_LOG"
+	            android:writePermission="android.permission.WRITE_CALL_LOG">
+	        </provider>
+
+可以看到,里面的android:authorities="call_log",所以访问数据库中calls表的Uri地址: `content://call_log/calls`

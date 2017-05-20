@@ -91,7 +91,7 @@
 
 如图,当需要查看该函数有什么功能,或者该类.直接点击这个按钮即可快速跳转到该函数的api(会打开浏览器).该按钮的快捷键是`Shift+F2`
 
-# 7. 将源码浓缩
+# 7. 将源码大小浓缩
 
 将源码根目录下的build和app下面的build删除,源码瞬间从几十M变为几百K
 
@@ -131,3 +131,11 @@
 
 
 Complete list of available postfix code completion can be found at **Settings** → **Editor** → **Postfix Templates**
+
+# 11. 全局搜索替换
+
+1.选中要替换的项目。
+
+2.右键选择“Replace in Path..”
+
+3.搜索要替换的字符串，find 键 替换即可

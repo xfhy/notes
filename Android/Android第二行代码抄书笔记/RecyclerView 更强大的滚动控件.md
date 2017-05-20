@@ -483,6 +483,45 @@
         }
     }
 
+## 7. 设置点击时背景效果
+
+为RecyclerView点击添加Ripple波纹效果
+
+1.新建`drawable/touch_bg.xml`
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	    <item android:drawable="@color/super_light_grey" android:state_pressed="true"/>
+	    <item android:drawable="@color/super_light_grey" android:state_focused="true"/>
+	    <item android:drawable="@color/white"/>
+	</selector>
+
+然后为点击的条目设置android:background="@drawable/touch_bg"
+在点击条目的时候便可以看到条目变色
+
+2.但是我们现在想要的是波纹效果，这里要注意，波纹效果只在5.0以上的设备生效
+所以我们需要新建`drawable-v21/touch_bg.xml`
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:color="@color/line_grey">
+	    <item android:drawable="@color/white"/>
+	</ripple>
+之后，便可以看到期待的波纹效果
+
+## 8. 全选RecyclerView条目
+
+	private void selectAll() {
+        //1, 遍历集合,选中所有条目
+        for (ProcessInfo process : processInfoList) {
+            process.setCheck(true);
+        }
+        //2, 更新适配器
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
 # 坑点
 
 ### 加载布局
