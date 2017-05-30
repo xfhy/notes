@@ -528,3 +528,20 @@
 最好是像下面这样加载,这样加载之后,会整个子项占满一行.
 
 	View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_item,parent,false);
+
+### 删除功能
+
+RecyclerView自带notifyItemRemoved方法不仅可以实现删除功能,而且还有动画效果. 然而并没有完,假如仅仅调用notifyItemRemoved的话,删除会出很多问题,比如:点击删除position = 1的Item,实际删除的是下一个,所以我们需要这么做,加上notifyItemRangeChanged这个方法,更新一下列表:
+
+	 @Override
+    public void onBindViewHolder(final GoogleViewHolder holder, final int position) {
+        final ItemBean item = items.get(position);
+        holder.buttonRecyclerDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    items.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, getItemCount());
+                }
+            });
+    }
