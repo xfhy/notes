@@ -47,6 +47,45 @@
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+## 让Toolbar文字居中
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<android.support.v7.widget.Toolbar
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:app="http://schemas.android.com/apk/res-auto"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="?attr/colorAccent"
+	    android:minHeight="?attr/actionBarSize"
+	    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+	    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+	
+	    <!--标题栏
+	           android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"    深色主题
+	       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"  popupTheme5.0系统才有的,需要兼容之前的系统
+	       -->
+	
+	    <!--Toolbar真正需要显示的标题文字内容   居中显示-->
+	    <TextView
+	        android:id="@+id/tv_title"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:layout_gravity="center"
+	        android:maxLines="1"
+	        android:text="文字居中"
+	        android:textColor="@android:color/white"
+	        android:textSize="20sp"/>
+	
+	</android.support.v7.widget.Toolbar>
+
+在代码中使用:
+
+	//找到标题栏
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mTitle = (TextView) view.findViewById(R.id.tv_title);
+        mToolbar.setTitle("");   //让标题默认是空的,然后让Toolbar中间的TextView去显示标题文字
+
 ## 添加action按钮
 
 效果如下:
@@ -172,7 +211,7 @@
 		        setSupportActionBar(toolbar);
 		
 		        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		        ActionBar actionBar = getSupportActionBar();   //具体实现是Toobar来完成的
+		        ActionBar actionBar = getSupportActionBar();   //具体实现是Toolbar来完成的
 		        if (actionBar != null) {
 		            actionBar.setDisplayHomeAsUpEnabled(true);  //让导航按钮显示出来
 		            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);  //设置导航按钮图标
@@ -210,6 +249,23 @@
 		    }
 		}
 
+3. 还可以这样写,这样写导航按钮有旋转特效哦:
+
+	setSupportActionBar(mToolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+4. 禁用或者开启侧滑菜单
+
+	//禁止手势滑动
+	mDrawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+	
+	//打开手势滑动
+	mDrawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
 ## NavigationView
 
 > 你可以在滑动菜单页面定制任意的布局,不过谷歌给我提供了一种更好的方法----使用NavigationView.NavigationView是Design Support库中提供的一个控件.
@@ -224,12 +280,13 @@
 		compile 'com.android.support:design:24.2.1'  
     	compile 'de.hdodenhof:circleimageview:2.1.0'
 
-第一个是Design Support->NavigationView
-第二个是图片圆形化的一个开源库
+第一个是Design Support库
+
+第二个是图片圆形化的一个开源库(CircleImageView),地址是https://github.com/hdodenhof/CircleImageView
 
 2. 在开始使用NavigationView之前,我们还需要准备好两个东西,menu和headerLayout.menu是用来在NavigationView中显示具体的菜单项的,headerLayout则是用来在NavigationView中显示头部布局的.
 
-新建menu文件夹->new->Menu resource file
+新建menu文件夹->new->Menu resource file  文件名:nav_menu.xml
 
 **menu**
 
@@ -241,6 +298,7 @@
 	    <!--android:checkableBehavior="single"表示所有菜单只能单选-->
 	    <group android:checkableBehavior="single">
 	
+			<!--这里的图片是72*72的-->
 	        <item
 	            android:id="@+id/nav_call"
 	            android:icon="@drawable/nav_call"
@@ -266,7 +324,7 @@
 
 	</menu>
 
-layout文件夹->new->layout resource file
+layout文件夹->new->layout resource file  文件名:nav_header.xml
 
 **headerLayout**
 

@@ -82,3 +82,15 @@
 	
 	</selector>
 
+## 2. selector color
+
+selector还可以使用在color上,类似于下面这样.然后在button 上使用:`android:textColor="@color/selector_txt_guide"`即可(需要建立res/color文件夹).
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	    <item android:color="@color/black" android:state_pressed="true"/>
+	    <item android:color="@color/white"/>
+	
+	</selector>
+
