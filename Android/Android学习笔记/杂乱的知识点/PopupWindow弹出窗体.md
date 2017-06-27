@@ -22,3 +22,51 @@
         //这里最终是放在view的正右方
         popupWindow.showAsDropDown(view,50,-view.getHeight()-20);
     }
+
+## 2.PopupWindow弹出动画
+
+- 需要一个出现动画
+- 需要一个消失动画
+- 设置动画`popupWindow.setAnimationStyle(R.style.popwin_anim_style);`
+
+1.在anim中添加2个文件，进入动画，消失动画
+
+进入动画
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<set xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	    <!--这是分享PopupWindow的出现时的动画-->
+	
+	    <translate
+	        android:fromXDelta="0"
+	        android:toXDelta="0"
+	        android:fromYDelta="400"
+	        android:toYDelta="0"
+	        android:duration="300" />
+	
+	</set>
+
+消失动画
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<set xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	    <!--这是分享PopupWindow的隐藏时的动画-->
+	
+	    <translate
+	        android:fromXDelta="0"
+	        android:toXDelta="0"
+	        android:fromYDelta="0"
+	        android:toYDelta="400"
+	        android:duration="300" />
+	
+	</set>
+
+style
+
+	<!--分享PopupWindow的动画style-->
+    <style name="popwin_anim_style">
+        <item name="android:windowEnterAnimation">@anim/share_menu_show</item>
+        <item name="android:windowExitAnimation">@anim/share_menu_hide</item>
+    </style>

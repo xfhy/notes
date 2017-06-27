@@ -381,3 +381,16 @@ getWritableDatabase:
 
     //用原生SQL语句进行查询
     DataSupport.findBySQL("select * from Book where pages > ? and price < ?","400","20"); 
+
+# 常见错误
+
+bug:数据库语句报错
+
+ 	db.execSQL("create table " + CACHE_TABLE_NAME + "(" +
+                    CACHE_TABLE_ID + " integer primary key autoincrement," +
+                    CACHE_TABLE_TYPE + " integer not null," +
+                    CACHE_TABLE_RESPONSE + " text," +
+                    CACHE_TABLE_DATE + " text" +
+                    ");");
+
+解决:autoincrement关键字必须写在primary key后面才行

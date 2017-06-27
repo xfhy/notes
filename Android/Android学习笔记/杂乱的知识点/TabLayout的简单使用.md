@@ -5,6 +5,8 @@
 效果如下:
 ![TabLayout.gif](https://ooo.0o0.ooo/2017/06/06/59364aa659eaf.gif)
 
+# 1.使用
+
 1.一般TabLayout是和ViewPager一起使用的.所有布局如下:
 
 	<android.support.design.widget.TabLayout
@@ -71,3 +73,17 @@
 **解决办法**:
 
 必须自己重写ViewPager的PagerAdapter的getPageTitle()方法,返回正确的tab文字.
+
+# 2.设置TabLayout的下划线颜色
+
+	app:tabIndicatorColor="@color/color_black"  下划线的颜色
+
+# 3.添加分割线
+
+	//添加TabLayout分割线
+        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(getActivity(),
+                R.drawable.layout_divider_vertical));
+        linearLayout.setDividerPadding(35);
+        linearLayout.setMinimumHeight(20);
