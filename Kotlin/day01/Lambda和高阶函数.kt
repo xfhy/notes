@@ -36,10 +36,5 @@ fun main(args: Array<String>) {
     a.map { sum += it }
     println(sum)
 
-    println("-----------------------------------------")
-    a.sortBy { it < it + 1 }
-    for (i in a) {
-        println(i)
-    }
 
 }
