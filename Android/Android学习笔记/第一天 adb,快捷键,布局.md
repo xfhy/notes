@@ -19,6 +19,8 @@
 	adb shell + ls -l ：查看当前设备的目录结构    su:获取root权限
 	adb shell+ logcat :查看系统运行中的日志信息
 	
+	dumpsys activity | grep "mFocusedActivity"  查看当前显示的Activity
+	
 #2.eclipse快捷键 
 	Ctrl+2+L:快速将返回的变量定义成变量
 	alt+shift+r :快速重命名变量
