@@ -126,6 +126,16 @@ https://atom.io/
 sudo dpkg -i atom-amd64.deb
 sudo apt-get -f install
 ```
+* peek 
+
+录屏软件
+
+```
+
+sudo add-apt-repository ppa:peek-developers/stable
+sudo apt update
+sudo apt install peek
+```
 
 ### 驱动
 * Qualcomm Atheros Device wifi驱动<br>

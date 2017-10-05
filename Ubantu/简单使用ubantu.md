@@ -3,8 +3,8 @@
 - 卸载软件：sudo apt-get remove xxxx
 - 更新：sudo apt-get update
 
-- 安装deb软件sudo dpkg -i google-chrome-stable_current_i386.deb 
-   装不上的解决办法：终端输入：  sudo apt-get -f install 
+- 安装deb软件sudo dpkg -i google-chrome-stable_current_i386.deb
+   装不上的解决办法：终端输入：  sudo apt-get -f install
 
 - 下载东西：wget 下载地址
 
@@ -16,5 +16,4 @@
 
 - 打开任务管理器 gnome-system-monitor  
 
-- 
-
+- 解压之后文件名乱码解决方法：unzip -O CP936 filename.zip
