@@ -1,0 +1,46 @@
+create database goods;
+go
+use goods;
+go
+create table login1
+(
+   name nvarchar(20) not null,    --用户名
+   pwd nvarchar(20) not null      --密码
+)
+select * from login1;
+
+--添加用户
+insert into login1(name,pwd) values('xxx','123');
+
+--登录判断
+--select * from login1 where name='xxx' and pwd='111'
+
+--更新用户数据   修改密码
+--update login1 set pwd='111' where name='xxx'
+
+--更新一行中多个数据
+update table2 set name='心肝宝贝',price='3' where id=2
+
+--删除用户
+--delete login1 where name='xxx'
+
+--商品分类表
+create table table1
+(
+    id int primary key identity(1,1),
+    name nvarchar(20) not null
+)
+
+--商品表
+create table table2
+(
+   id int primary key identity(1,1),
+   name nvarchar(20) not null,    --名字
+   price decimal not null,         --价格
+   c_id int foreign key references table1(id)
+)
+
+--添加新列
+--alter table table2 add [c_id] int foreign key references table1(id)
+
+alter table Student drop column sgrade;   --删除列
