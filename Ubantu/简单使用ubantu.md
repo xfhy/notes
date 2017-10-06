@@ -17,3 +17,5 @@
 - 打开任务管理器 gnome-system-monitor  
 
 - 解压之后文件名乱码解决方法：unzip -O CP936 filename.zip
+
+- 在输入法为中文时输入英文标点符号 : `ctrl+.`
