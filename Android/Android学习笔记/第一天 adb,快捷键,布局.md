@@ -8,7 +8,7 @@
 
 	adb -s 设备名 pull 手机端文件 电脑端需要存放的文件路径     :把手机上的文件存到电脑端
 
-	adb install [-r] apkpath(apk文件路径) : 安装apk到手机 -r:强制安装
+	adb install [-r] apkpath(apk文件路径) : 安装apk到手机 -r:重新安装
 
 	adb uninstall packagename  :卸载手机上的app
 
