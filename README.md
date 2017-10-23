@@ -11,7 +11,11 @@
 ## 程序员修养
 
 - 数据结构
+	- [代码](https://github.com/xfhy/dataStructure)
+	- [笔记]( https://github.com/xfhy/notes/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
 - 算法
+	- [代码](https://github.com/xfhy/Algorithm-basis)
+	- [笔记](https://github.com/xfhy/notes/tree/master/%E7%AE%97%E6%B3%95)
 - 操作系统
 - 计算机网络
 - linux
@@ -23,3 +27,4 @@
 ## 想学习的语言
 
 - Python 搞事情,作为第二兴趣爱好吧
+	- [代码](https://github.com/xfhy/LearnPython)
