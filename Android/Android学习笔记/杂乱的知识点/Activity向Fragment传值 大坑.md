@@ -1,0 +1,3 @@
+今天在看别人的代码时,发现Activity向Fragment中传值时是用的set()方法....我以为是对的,后来踩了各种坑,,,,
+
+正确做法:Activity向Fragment中传值应该用setArguments()   不然会发生各种各样奇形怪状的问题...........
