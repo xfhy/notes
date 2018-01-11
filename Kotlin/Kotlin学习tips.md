@@ -256,3 +256,78 @@ var gender: Int by Delegates.vetoable(0) { property, oldValue, newValue ->
     (oldValue < newValue)
 }
 ```
+
+32. 直观上的相等
+你可以停止使用equals()方法来判断相等,因为== 这个操作符将会检测结构相等性。
+```kotlin
+val john1 = Person("John")
+val john2 = Person("John")
+
+john1 == john2    // true  (structural equality 结构(即John)相等)
+john1 === john2   // false (referential equality 引用相等)
+```
+
+33. 默认参数
+不需要定义几个相似参数的方法
+```kotlin
+fun build(title: String, width: Int = 800, height: Int = 600) {
+    Frame(title, width, height)
+}
+```
+
+34. when表达式
+switch语句被替换成更加易读和灵活的when表达式。
+```kotlin
+when (x) {
+    1 -> print("x is 1")
+    2 -> print("x is 2")
+    3, 4 -> print("x is 3 or 4")
+    in 5..10 -> print("x is 5, 6, 7, 8, 9, or 10")
+    else -> print("x is out of range")
+}
+```
+既可以作为一个表达式或者一个语句,也可以有参数或者没有参数
+```kotlin
+val res: Boolean = when {
+    obj == null -> false
+    obj is String -> true
+    else -> throw IllegalStateException()
+}
+```
+
+35. 范围(Ranges)
+方便可读性
+```kotlin
+for (i in 1..100) { ... } 
+for (i in 0 until 100) { ... }
+for (i in 2..10 step 2) { ... } 
+for (i in 10 downTo 1) { ... } 
+if (x in 1..10) { ... }
+```
+
+36. 扩展方法/功能
+是否还记得第一次使用Java中List的排序么?你找不到一个sort方法进行排序从而你不得不咨询你的老师或者查找google来获取到Collections.sort()这个方法.后来当你使用一个String的时候可能你会写一个帮助类来帮助你达到想要的目的,因为你不知道有StringUtils.capitalize()
+如果只有一种方法可以向旧类添加新功能,这样你的IDE将会帮助你在代码中找到相应的功能,这一点在Kotlin上面很容易实现.
+```kotlin
+fun String.format(): String {
+    return this.replace(' ', '_')
+}
+val formatted = str.format()
+```
+标准库扩展了Java的原始类型的功能，这正是String特别需要的：
+```kotlin
+str.removeSuffix(".txt")  删除后缀
+str.capitalize()  首字母大写
+str.substringAfterLast("/")  删除/之前的字母,包括/也删除
+str.replaceAfter(":", "classified") 
+```
+
+37. 空值安全
+安全调用可以链接在一起，以避免我们有时用其他语言编写的嵌套的if-not-null检查，如果我们想要一个非null之外的默认值，我们可以使用elvis操作符
+`val name = ship?.captain?.name ?: "unknown" `
+
+如果这样并不适用于你，而且你需要一个NPE，你将不得不明确地要求它
+```kotlin
+val x = b?.length ?: throw NullPointerException()  // 与下面一样
+val x = b!!.length                                 // 与上面一样
+```
