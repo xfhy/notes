@@ -1,0 +1,4 @@
+- 开启gradle daemon，即在~/.gradle/gradle.properties文件中，增加org.gradle.daemon=true
+- 在项目的gradle.properties中增加kotlin.incremental=true 开启kotlin的增量编译。
+- 尝试使用最新的kotlin版本，增加编译速度是Kotlin团队一直努力的目标
+- 更多的加速编译的方法，请参考[一些关于加速Gradle构建的个人经验](https://link.juejin.im/?target=http%3A%2F%2Fdroidyue.com%2Fblog%2F2017%2F04%2F16%2Fspeedup-gradle-building%2F)
