@@ -111,19 +111,33 @@
 ## 12.删除错误提交的commit
 
 方法:
-1.先git log查看最近一次正确的commit_id
+1.先git log查看最近一次正确的commit_id(git reflog查看命令历史)
 2.输入一下命令
 
 	git reset --hard <commit_id>
     git push origin HEAD --force
 
- git reset –hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容.
+ git reset –-hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容.
 
 HEAD 最近一个提交
 
 HEAD^ 上一次
 
+上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+
 <commit_id>  每次commit的SHA1值. 可以用git log 看到,也可以在页面上commit标签页里找到.
+
+## 13. 追加修改
+
+当开发者提交了一个commit之后,如果发现该commit有错,可以随时对这个commit进行修改,例如在文件中笔者第一次修改,增加了一行文本"test1"并通过add,commit操作进行了提交.这时候笔者想修改这行文本为"test1/2",这时候就不用重新生成一个提交,直接使用`git commit --amend`指令即可,完整的示例如下所示.
+```
+git add README.md
+git commit -m "test1"
+subl README.md     (修改文件)
+git add README.md
+git commit --amend -m "add test2"
+```
+通过这种方式可以修改commit,而不是通过新的commit来修正前一个错误的commit.
 
 
 
