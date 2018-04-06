@@ -165,7 +165,7 @@ public static int randInt(int min, int max) {
 
 * 在activity中调用 moveTaskToBack (boolean nonRoot)方法即可将activity 退到后台，注意不是finish()退出。
 
-* activity中的runOnUiThrea(Runnable action)方法可以直接回到主线程
+* activity中的runOnUiThread(Runnable action)方法可以直接回到主线程
 
 * listview有个footerDividersEnabled和headerDividersEnabled方法可以设置listview的顶部和底部divide，但是必须保证你设置了headview和footview才会有效果
 

@@ -28,6 +28,8 @@ client接收到server发回的ACK(J+1)包后，进入ESTABLISHED状态。然后�
 以下面这张图为例，我们来分析一下TCP四次挥手的过程。
 ![](https://user-gold-cdn.xitu.io/2018/2/5/1616591831ac99e0?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
+> 四次挥手的原因:客户端发送了 FIN 连接释放报文之后，服务器收到了这个报文，就进入了 CLOSE-WAIT 状态。这个状态是为了让服务器端发送还未传送完毕的数据，传送完毕之后，服务器会发送 FIN 连接释放报文。
+
 ### 第一次挥手
 client发送一个FIN(M)包，此时client进入FIN-WAIT-1状态，这表明client已经没有数据要发送了。
 ### 第二次挥手
