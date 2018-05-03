@@ -125,7 +125,9 @@ public ArrayList(int initialCapacity) {
 
 ## 四.增加元素+扩容机制
 
-### 1. 添加单个元素
+### 1. 添加单个元素 
+
+ add(E e)方法作用: 添加指定元素到末尾
 
 ```java
 /**
@@ -195,7 +197,9 @@ private static int hugeCapacity(int minCapacity) {
 
 2. 添加元素到末尾
 
-### 2. 添加元素到指定位置
+### 2. 添加元素到指定位置  
+
+add(int index, E element)方法作用:添加元素到指定位置
 
 ```java
 /**
@@ -226,4 +230,419 @@ private void rangeCheckForAdd(int index) {
 
 大体思路:这里理解了上面的扩容之后,这里是比较简单的.其实就是在数组的某一个位置插入元素,那么我们将该索引处往后移动一位,腾出一个坑,最后将该元素放到此索引处(填坑)就行啦.
 
+### 3. 添加集合到末尾  
 
+addAll(Collection<? extends E> c)方法作用:添加集合到末尾,如果集合是null,那么会抛出NullPointerException.
+
+```java
+public boolean addAll(Collection<? extends E> c) {
+    //1. 生成一个包含集合c所有元素的数组a
+    Object[] a = c.toArray();
+    //2. 记录需要插入的数组长度
+    int numNew = a.length;
+    //3. 判断一下是否需要扩容
+    ensureCapacityInternal(size + numNew);  // Increments modCount
+    //4. 将a数组全部复制到elementData末尾处
+    System.arraycopy(a, 0, elementData, size, numNew);
+    //5. 标记当前elementData已有元素的个数
+    size += numNew;
+    //6. 是否插入成功:c集合不为空就行
+    return numNew != 0;
+}
+```
+
+大体思路:代码思路是非常清晰的,很简单,就是将需要插入的集合转成数组a,再将a数组插入到当前elementData的末尾(其中还判断了一下是否需要扩容).
+
+### 4. 添加集合到指定位置 
+
+addAll(int index, Collection<? extends E> c)方法作用:添加集合到指定位置,可能会抛出IndexOutOfBoundsException(index不合法)或者NullPointerException(集合为null)
+
+```java
+public boolean addAll(int index, Collection<? extends E> c) {
+    //1. 首先检查一下下标是否越界
+    rangeCheckForAdd(index);
+
+    //2. 生成一个包含集合c所有元素的数组a
+    Object[] a = c.toArray();
+    //3. 记录需要插入的数组长度
+    int numNew = a.length;
+    //4. 判断是否需要扩容
+    ensureCapacityInternal(size + numNew);  // Increments modCount
+
+    //5. 需要往后移的元素个数
+    int numMoved = size - index;
+    if (numMoved > 0) //后面有元素才需要复制哈,否则相当于插入到末尾
+        //6. 将elementData的从index开始的numMoved个元素复制到index + numNew处
+        System.arraycopy(elementData, index, elementData, index + numNew,
+                            numMoved);
+    //7. 将a复制到elementData的index处  
+    System.arraycopy(a, 0, elementData, index, numNew);
+    //8. 标记当前elementData已有元素的个数
+    size += numNew;
+    //9. 是否插入成功:c集合不为空就行
+    return numNew != 0;
+}
+private void rangeCheckForAdd(int index) {
+    if (index > size || index < 0)
+        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+```
+
+大体思路:其实就是一个先挖坑,再填坑的故事.首先判断一下添加了集合之后是否需要扩容,因为需要将集合插入到index处,所以需要将index后面的元素往后挪动,需要挪动的元素个数为:size - index,挪动的间隔是index + numNew(因为需要留出一个坑,用来存放需要插入的集合).
+有了上面的步骤后就可以安全的将集合复制到elementData的index,也就完成了集合的插入.
+
+其实我们可以看到,源码中对于细节的处理很细致,值得学习.
+
+## 五.删除元素
+
+### 1. 移除指定位置元素 
+
+remove(int index)方法作用:移除指定位置元素,可能会抛出IndexOutOfBoundsException或ArrayIndexOutOfBoundsException
+
+```java
+public E remove(int index) {
+    //1. 检查参数是否合法
+    rangeCheck(index);
+
+    modCount++;
+    //2. 记录下需要移除的元素
+    E oldValue = elementData(index);
+
+    //3. 需要往前面挪动1个单位的元素个数
+    int numMoved = size - index - 1;
+    if (numMoved > 0) //后面有元素才挪动
+        //4. 将index后面的元素(不包含index)往前"挪动"(复制)一位
+        System.arraycopy(elementData, index+1, elementData, index,
+                            numMoved);
+    //5. 这里处理得很巧妙,首先将size-1,然后将elementData原来的最后那个元素赋值为null(方便GC回收)
+    elementData[--size] = null; // clear to let GC do its work
+
+    //6. 将旧值返回
+    return oldValue;
+}
+
+//检查参数是否合法   参数>size抛出IndexOutOfBoundsException   参数小于0则抛出ArrayIndexOutOfBoundsException
+private void rangeCheck(int index) {
+    if (index >= size)
+        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+```
+
+大体思路:
+
+1. 首先将旧值取出来,保存起来
+2. 然后将数组的index后面的元素往前挪动一位
+3. 将数组的末尾元素赋值为null,方便GC回收.因为已经将index后面的元素往前挪动了一位,所以最后一位是多余的,及时清理掉.
+
+### 2. 移除指定元素 
+
+remove(Object o)方法作用:移除指定元素,只移除第一个集合中与指定元素相同(通过equals()判断)的元素.移除成功了则返回true,未移除任何元素则返回false
+
+- 如果传入的是null,则移除第一个null元素
+- 如果传入的是非null元素,则移除第一个相同的元素,通过equals()进行比较.所以,如果是自己写的类,则需要重写equals()方法.一般需要用到元素比较的,都需要实现equals()方法,有时候还需要重写hashCode()方法.
+
+```java
+public boolean remove(Object o) {
+    //1. 是否为null
+    if (o == null) {
+        //2. 循环遍历第一个为null的元素
+        for (int index = 0; index < size; index++)
+            if (elementData[index] == null) {
+                //3. 移除   移除之后就返回true
+                fastRemove(index);
+                return true;
+            }
+    } else {
+        //4. 循环遍历第一个与o equals()的元素
+        for (int index = 0; index < size; index++)
+            if (o.equals(elementData[index])) {
+                //5. 移除指定位置元素
+                fastRemove(index);
+                return true;
+            }
+    }
+    return false;
+}
+/*
+私有的方法,移除指定位置元素,其实和remove(int index)是一样的.不同的是没有返回值
+*/
+private void fastRemove(int index) {
+    modCount++;
+    int numMoved = size - index - 1;
+    if (numMoved > 0)
+        System.arraycopy(elementData, index+1, elementData, index,
+                            numMoved);
+    elementData[--size] = null; // clear to let GC do its work
+}
+```
+
+大体思路:   
+1. 首先判断需要移除的元素是否为null
+2. 如果为null,则循环遍历数组,移除第一个为null的元素  
+3. 如果非null,则循环遍历数组,移除第一个与指定元素相同(equals() 返回true)的元素
+
+可以看到最后都是移除指定位置的元素,源码中为了追求最佳的性能,加了一个fastRemove(int index)方法,次方法的实现与remove(int index)是几乎是一样的,就是少了返回index索引处元素的值.
+
+### 3. 从此列表中删除所有包含在给定集合中的元素
+
+removeAll(Collection<?> c)方法作用:从此列表中删除所有包含在c中的元素.
+
+```java
+public boolean removeAll(Collection<?> c) {
+    //判空
+    Objects.requireNonNull(c);
+    return batchRemove(c, false);
+}
+
+//complement是true 则移除elementData中除了c以外的其他元素
+//complement是false 则移除c和elementData(当前列表的数组)都含有的元素
+private boolean batchRemove(Collection<?> c, boolean complement) {
+    //1. 引用不可变
+    final Object[] elementData = this.elementData;
+    //r 是记录整个数组下标的, w是记录有效元素索引的
+    int r = 0, w = 0;
+    boolean modified = false;
+    try {
+        //2. 循环遍历数组
+        for (; r < size; r++)
+            //3. 如果complement为false  相当于是取c在elementData中的补集,c包含则不记录,c不包含则记录
+            //如果complement为true  相当于是取c和elementData的交集,c包含则记录,c不包含则不记录
+            if (c.contains(elementData[r]) == complement)
+                elementData[w++] = elementData[r];   //r是正在遍历的位置  w是用于记录有效元素的   在w之前的全是有效元素,w之后的会被"删除"
+    } finally {
+        // Preserve behavioral compatibility with AbstractCollection,
+        // even if c.contains() throws.
+        //4. 如果上面在遍历的过程中出错了,那么r肯定不等于size,于是源码就将出错位置r后面的元素全部放到w后面
+        if (r != size) {
+            System.arraycopy(elementData, r,
+                                elementData, w,
+                                size - r);
+            w += size - r;
+        }
+        //5. 如果w是不等于size,那么说明是需要删除元素的    否则不需要删除任何元素
+        if (w != size) {
+            // clear to let GC do its work
+            //6. 将w之后的元素全部置空  因为这些已经没用了,置空方便GC回收
+            for (int i = w; i < size; i++)
+                elementData[i] = null;
+            modCount += size - w;
+            //7. 记录当前有效元素
+            size = w;
+            //8. 标记已修改
+            modified = true;
+        }
+    }
+    return modified;
+}
+```
+
+大体思路:
+
+1. 首先我们进行c集合检查,判断是否为null
+2. 然后我们调用batchRemove()方法去移除 c集合与当前列表的交集
+3. 循环遍历当前数组,记录c集合中没有的元素,放在前面(记录下标为w),w前面的是留下来的元素,w后面的是需要删除的数据
+4. 第3步可能会出错,出错的情况下,则将出错位置的后面的全部保留下来,不删除
+5. 然后就是将w之后的元素全部置空(方便GC回收),然后将size(标记当前数组有效元素)的值赋值为w,即完成了删除工作
+
+再笼统一点说吧,其实就是将当前数组(elementData)中未包含在c中的元素,全部放在elementData数组的最前面,假设为w个,最后再统一置空后面的元素,并且记录当前数组有效元素个数为w.即完成了删除工作.
+
+### 4. 清空列表
+
+clear() 方法作用:清空当前集合的所有元素
+
+这个方法非常简单,就是将数组所有元素都置为null,然后GC就有机会去把它回收了
+
+```java
+public void clear() {
+    modCount++;
+
+    // clear to let GC do its work
+    for (int i = 0; i < size; i++)
+        elementData[i] = null;
+
+    size = 0;
+}
+```
+
+### 5. 移除相应区间内的所有元素(protected)
+
+removeRange(int fromIndex, int toIndex)方法作用:移除指定区间内的所有元素,注意这是protected方法,既然是移除元素,那么就拿出来欣赏欣赏.
+
+```java
+//这是protected方法    移除相应区间内的所有元素
+protected void removeRange(int fromIndex, int toIndex) {
+    modCount++;
+    //1. toIndex后面的元素需要保留下来,记录一下toIndex后面的元素个数
+    int numMoved = size - toIndex;
+    //2. 将toIndex后面的元素复制到fromIndex处
+    System.arraycopy(elementData, toIndex, elementData, fromIndex,
+                        numMoved);
+
+    // clear to let GC do its work
+    //3. 将有效元素后面的元素置空
+    int newSize = size - (toIndex-fromIndex);
+    for (int i = newSize; i < size; i++) {
+        elementData[i] = null;
+    }
+    //4. 记录当前有效元素个数为size - (toIndex-fromIndex)  ,即减去那个区间内的元素个数
+    size = newSize;
+}
+```
+
+大体思路:
+
+1. 假设需要移除(fromIndex,toIndex)区间内的元素,那么将toIndex后面的元素复制到fromIndex处
+2. 将有效元素后面的元素置空
+
+## 六,改动元素
+
+### 1. 替换指定下标的元素内容
+
+set(int index, E element):替换index索引处的元素为element,可能会抛出IndexOutOfBoundsException
+
+这里比较简单,就是将index处的元素替换成element
+
+```java
+public E set(int index, E element) {
+    //1. 入参检测
+    rangeCheck(index);
+
+    //2. 记录原来该index处的值
+    E oldValue = elementData(index);
+    //3. 替换
+    elementData[index] = element;
+    return oldValue;
+}
+```
+
+## 七,查询元素
+
+### 1. 返回指定位置处元素
+
+这个非常简单,就是将index索引处的数组的值返回
+
+```java
+E elementData(int index) {
+    return (E) elementData[index];
+}
+
+/**
+* 返回指定位置处元素
+*/
+public E get(int index) {
+    rangeCheck(index);
+
+    return elementData(index);
+}
+```
+
+### 2.通过iterator()遍历
+
+> 这也是查询的一种,哈哈
+
+首先我们了解一下**fail-fast**,fail-fast 机制是java集合(Collection)中的一种错误机制。
+当多个线程对同一个集合的内容进行操作时，就可能会产生fail-fast事件。例如：当某一个线程A通过iterator去遍历某集合的过程中，
+若该集合的内容被其他线程所改变了；那么线程A访问集合时，就会抛出ConcurrentModificationException异常，产生fail-fast事件。
+
+要了解fail-fast机制，我们首先要对ConcurrentModificationException 异常有所了解。当方法检测到对象的并发修改，但不允许这种修改时就抛出该异常。同时需要注意的是，该异常不会始终指出对象已经由不同线程并发修改，如果单线程违反了规则，同样也有可能会抛出该异常。
+
+
+我们先来看看iterator()方法,它new了一个Itr(ArrayList的内部类)进行返回.
+
+```java
+/**
+* Returns an iterator over the elements in this list in proper sequence.
+* <p>The returned iterator is <a href="#fail-fast"><i>fail-fast</i></a>.
+* @return an iterator over the elements in this list in proper sequence
+
+以适当的顺序返回此列表中元素的迭代器。  fail-fast:快速失败?
+*/
+public Iterator<E> iterator() {
+    return new Itr();
+}
+```
+
+接下来我们来看看这个内部类
+
+```java
+private class Itr implements Iterator<E> {
+    int cursor;       // index of next element to return    下一个元素的索引
+    int lastRet = -1; // index of last element returned; -1 if no such    当前访问的最后一个元素的索引
+    int expectedModCount = modCount;
+
+    //是否有下一个元素
+    public boolean hasNext() {
+        //就是比一下cursor与size的大小   但是为什么是!=,而不是cursor<=size,这里有点蒙
+        return cursor != size;
+    }
+
+    @SuppressWarnings("unchecked")
+    public E next() {
+        //判断一下该列表是否被其他线程改过(在迭代过程中)   修改过则抛异常
+        checkForComodification();
+        //第一次的时候是等于0   从0开始往后取数据
+        int i = cursor;
+        //如果越界 则抛异常
+        if (i >= size)
+            throw new NoSuchElementException();
+        Object[] elementData = ArrayList.this.elementData;
+        //不能访问超出elementData.length的索引 
+        if (i >= elementData.length)
+            throw new ConcurrentModificationException();
+        //往后挪一位  下一次就能访问下一位元素
+        cursor = i + 1;
+        //将需要访问的元素返回
+        return (E) elementData[lastRet = i];
+    }
+
+    //移除当前访问到的最后一位元素
+    public void remove() {
+        //入参检测
+        if (lastRet < 0)
+            throw new IllegalStateException();
+        //判断一下该列表是否被其他线程改过(在迭代过程中)   修改过则抛异常
+        checkForComodification();
+
+        try {
+            //移除当前访问到的最后一位元素
+            ArrayList.this.remove(lastRet);
+            cursor = lastRet;
+            lastRet = -1;
+            expectedModCount = modCount;
+        } catch (IndexOutOfBoundsException ex) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
+    //快速遍历列表
+    @Override
+    @SuppressWarnings("unchecked")
+    public void forEachRemaining(Consumer<? super E> consumer) {
+        //入参检测
+        Objects.requireNonNull(consumer);
+        final int size = ArrayList.this.size;
+        int i = cursor;
+        if (i >= size) {
+            return;
+        }
+        final Object[] elementData = ArrayList.this.elementData;
+        if (i >= elementData.length) {
+            throw new ConcurrentModificationException();
+        }
+
+        //循环遍历 不断回调consumer.accept()  将elementData每个元素都回调一次
+        while (i != size && modCount == expectedModCount) {
+            consumer.accept((E) elementData[i++]);
+        }
+        // update once at end of iteration to reduce heap write traffic
+        cursor = i;
+        lastRet = i - 1;
+        checkForComodification();
+    }
+
+    final void checkForComodification() {
+        if (modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+    }
+}
+```
