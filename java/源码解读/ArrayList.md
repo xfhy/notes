@@ -1,6 +1,11 @@
-# ArrayList源码分析
 
-# ArrayList源码概述
+> 欣赏我们常用集合ArrayList的源码,学习API背后的故事.
+
+**引言**
+
+学Java很久了,一直处于使用API+查API的状态,不了解原理,久而久之总是觉得很虚,作为一名合格的程序员这是不允许的,不能一直当API Player,我们要去了解分析底层实现,下次在使用时才能知己知彼.知道在什么时候该用什么方法和什么类比较合适.
+
+之前写的第一篇Java源码阅读文章[从源码角度彻底搞懂String、StringBuffer、StringBuilder](https://blog.csdn.net/xfhy_/article/details/80019618),感兴趣的可以去看看.
 
 ## 一、ArrayList的基本特点
 
@@ -586,7 +591,7 @@ private class Itr implements Iterator<E> {
         if (i >= size)
             throw new NoSuchElementException();
         Object[] elementData = ArrayList.this.elementData;
-        //不能访问超出elementData.length的索引 
+        //不能访问超出elementData.length的索引    可能是被其他线程改动了
         if (i >= elementData.length)
             throw new ConcurrentModificationException();
         //往后挪一位  下一次就能访问下一位元素
@@ -622,10 +627,12 @@ private class Itr implements Iterator<E> {
         Objects.requireNonNull(consumer);
         final int size = ArrayList.this.size;
         int i = cursor;
+        //遍历完成 不用继续了
         if (i >= size) {
             return;
         }
         final Object[] elementData = ArrayList.this.elementData;
+        //可能是被其他线程改动了
         if (i >= elementData.length) {
             throw new ConcurrentModificationException();
         }
@@ -640,9 +647,24 @@ private class Itr implements Iterator<E> {
         checkForComodification();
     }
 
+    //判断一下该列表是否被其他线程改过(在迭代过程中)   修改过则抛异常
     final void checkForComodification() {
         if (modCount != expectedModCount)
             throw new ConcurrentModificationException();
     }
 }
-```
+``` 
+
+## 八,总结
+
+这是我第二次看源码,分析,鉴赏,学到了不少东西,相信各位认真看完的同学也多多少少有些感触.源码对于细节方面想的很周到,很谨慎.
+
+下面我们来总结一下ArrayList的关键点
+
+**ArrayList关键点**
+
+- 底层是Object数组存储数据
+- 扩容机制:默认大小是10,扩容是扩容到之前的1.5倍的大小,每次扩容都是将原数组的数据复制进新数组中.  我的领悟:如果是已经知道了需要创建多少个元素,那么尽量用`new ArrayList<>(13)`这种明确容量的方式创建ArrayList.避免不必要的浪费.
+- 添加:如果是添加到数组的指定位置,那么可能会挪动大量的数组元素,并且可能会触发扩容机制;如果是添加到末尾的话,那么只可能触发扩容机制.  
+- 删除:如果是删除数组指定位置的元素,那么可能会挪动大量的数组元素;如果是删除末尾元素的话,那么代价是最小的.    ArrayList里面的删除元素,其实是将该元素置为null.
+- 查询和改某个位置的元素是非常快的( O(1) ).
