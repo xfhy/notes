@@ -128,7 +128,7 @@ public ArrayList(int initialCapacity) {
 }
 ```
 
-## 四.增加元素+扩容机制
+## 四、增加元素+扩容机制
 
 ### 1. 添加单个元素 
 
@@ -298,7 +298,7 @@ private void rangeCheckForAdd(int index) {
 
 其实我们可以看到,源码中对于细节的处理很细致,值得学习.
 
-## 五.删除元素
+## 五、删除元素
 
 ### 1. 移除指定位置元素 
 
@@ -499,7 +499,7 @@ protected void removeRange(int fromIndex, int toIndex) {
 1. 假设需要移除(fromIndex,toIndex)区间内的元素,那么将toIndex后面的元素复制到fromIndex处
 2. 将有效元素后面的元素置空
 
-## 六,改动元素
+## 六、改动元素
 
 ### 1. 替换指定下标的元素内容
 
@@ -520,7 +520,7 @@ public E set(int index, E element) {
 }
 ```
 
-## 七,查询元素
+## 七、查询元素
 
 ### 1. 返回指定位置处元素
 
@@ -655,7 +655,7 @@ private class Itr implements Iterator<E> {
 }
 ``` 
 
-## 八,总结
+## 八、总结
 
 这是我第二次看源码,分析,鉴赏,学到了不少东西,相信各位认真看完的同学也多多少少有些感触.源码对于细节方面想的很周到,很谨慎.
 
