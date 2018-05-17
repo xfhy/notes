@@ -589,35 +589,378 @@ public boolean remove(Object o) {
 
 大体思路:
 
+1. 首先判断入参是否为null
+2. 如果为null,那么循环遍历链表,从头节点开始往后查找,找到第一个节点的数据值为null的,直接删除该节点.
+3. 如果非null,那么循环遍历链表,从头节点开始往后查找,找到第一个节点的数据值为o的,直接删除该节点.
+
+这里的循环遍历链表的代码,我觉得还是比较通用的,从头节点开始,通过不断的将x赋值为下一个元素,直到遍历到为null的地方结束,这样就完美的遍历完了链表所有节点.
+
 ### 4. removeFirstOccurrence(Object o)
 
-方法作用:
+方法作用:从此链表中删除第一次出现的指定元素o.  内部其实就是上面的remove(o);
 
 ```java
+public boolean removeFirstOccurrence(Object o) {
+    return remove(o);
+}
 ```
-
-大体思路:
 
 ### 5. removeLast()
 
-方法作用:
+方法作用:移除最后一个元素并返回
 
 ```java
+public E removeLast() {
+    final Node<E> l = last;
+    //如果链表是空的,那么就要抛出一个错误
+    if (l == null)
+        throw new NoSuchElementException();
+    return unlinkLast(l);
+}
+/**
+* Unlinks non-null last node l.
+移除链表最后一个元素
+*/
+private E unlinkLast(Node<E> l) {
+    // assert l == last && l != null;
+
+    //1. 记录尾节点数据值
+    final E element = l.item;
+    //2. 找到尾节点的前一个节点prev
+    final Node<E> prev = l.prev;
+    //3. 将尾节点置空  方便GC
+    l.item = null;
+    l.prev = null; // help GC
+    //4. 将last赋值为prev  
+    last = prev;
+    //5. 判断prev是否为null
+    //为空的话,说明之前链表就只有1个节点,现在删了之后,头节点和尾节点都为null了
+    //非空,直接将新任尾节点的next指针指向null
+    if (prev == null)
+        first = null;
+    else
+        prev.next = null;
+    //6. 链表长度-1
+    size--;
+    modCount++;
+    //7. 返回之前尾节点数据值
+    return element;
+}
 ```
 
 大体思路:
+
+1. 判断链表是否有节点, 没有节点直接抛错误....
+2. 首先找到倒数第二个节点(可能没有哈,没有的话,说明链表只有一个节点)prev
+3. 然后将尾节点置空,prev的next指针指向null
 
 ### 6. removeLastOccurrence(Object o)
 
 
-方法作用:
+方法作用:从此链表中删除最后一次出现的指定元素o.    
+
+实现:其实和上面的remove(o)是一样的,只不过这里遍历时是从尾节点开始往前查找的.
 
 ```java
+public boolean removeLastOccurrence(Object o) {
+    if (o == null) {
+        for (Node<E> x = last; x != null; x = x.prev) {
+            if (x.item == null) {
+                unlink(x);
+                return true;
+            }
+        }
+    } else {
+        for (Node<E> x = last; x != null; x = x.prev) {
+            if (o.equals(x.item)) {
+                unlink(x);
+                return true;
+            }
+        }
+    }
+    return false;
+}
 ```
 
-大体思路:
+### 7. poll()
+
+方法作用:获取第一个元素的同时删除第一个元素,当链表无节点时,不会报错.  这里的unlinkFirst()上面已分析过.
+
+```java
+public E poll() {
+    final Node<E> f = first;
+    return (f == null) ? null : unlinkFirst(f);
+}
+```
+
+### 8. pop()
+
+方法作用:获取第一个元素的同时删除第一个元素,当链表无节点时,会报错.
+
+```java
+public E pop() {
+    return removeFirst();
+}
+public E removeFirst() {
+    final Node<E> f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return unlinkFirst(f);
+}
+
+```
 
 ## 七、修改元素
+
+### 1. set(int index, E element) 
+
+方法作用:设置index处节点数据值为element
+
+```java
+public E set(int index, E element) {
+    //1. 入参检测
+    checkElementIndex(index);
+    //2. 找到index处节点,上面已分析该方法
+    Node<E> x = node(index);
+    //3. 保存该节点旧值
+    E oldVal = x.item;
+    //4. 替换为新值
+    x.item = element;
+    //5. 将旧值返回
+    return oldVal;
+}
+```
+
+大体思路:非常简单,就是首先找到index处节点,替换该节点数据值
+
+
 ## 八、查询元素
-## 九、LinkedList的继承关系
-## 十、LinkedList的继承关系
+
+### 1. element()
+
+方法作用:获取链表第一个元素.   方法比较简单,就是将链表头节点数据值进行返回
+
+```java
+public E element() {
+    return getFirst();
+}
+public E getFirst() {
+    final Node<E> f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return f.item;
+}
+```
+
+### 2. get(int index)
+
+方法作用:获取指定索引处元素.   方法比较简单,就是通过node(index)找到index索引处节点,然后返回其数据值
+
+```java
+public E get(int index) {
+    //1. 入参检测
+    checkElementIndex(index);
+    //2. 获取指定索引处节点数据值
+    return node(index).item;
+}
+```
+
+### 3. getFirst()
+
+方法作用:获取链表第一个元素.   非常简单,就是将first的数据值返回
+
+```java
+public E getFirst() {
+    final Node<E> f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return f.item;
+}
+```
+
+### 4. getLast()
+
+方法作用:获取链表最后一个元素.   非常简单,就是将last的数据值返回
+
+```java
+public E getLast() {
+    final Node<E> l = last;
+    if (l == null)
+        throw new NoSuchElementException();
+    return l.item;
+}
+```
+
+### 5. 通过listIterator()遍历
+
+> 这也是查询的一种,哈哈
+
+我们先来看看`listIterator(int index)`方法,就是new了一个ListItr进行返回.ListItr是LinkedList的内部类.
+
+```java
+public ListIterator<E> listIterator(int index) {
+    checkPositionIndex(index);
+    return new ListItr(index);
+}
+```
+
+接下来,我们看看这个内部类:
+
+```java
+private class ListItr implements ListIterator<E> {
+    //上一次返回的节点
+    private Node<E> lastReturned;
+    //下一个节点
+    private Node<E> next;
+    //下一个节点索引
+    private int nextIndex;
+    private int expectedModCount = modCount;
+
+    ListItr(int index) {
+        // assert isPositionIndex(index);
+        //如果是最后一个节点,那么返回next是null    
+        //如果不是最后一个节点,那么找到该index索引处节点
+        next = (index == size) ? null : node(index);
+        nextIndex = index;
+    }
+
+    public boolean hasNext() {
+        //判断是否还有下一个元素
+        return nextIndex < size;
+    }
+
+    //获取下一个元素
+    public E next() {
+        checkForComodification();
+        //1. 如果没有下一个元素   抛异常
+        if (!hasNext())
+            throw new NoSuchElementException();
+
+        //2. 记录上一次遍历到的节点
+        lastReturned = next;
+        //3. 往后移
+        next = next.next;
+        //4. 索引+1
+        nextIndex++;
+        //5. 将遍历到的节点数据值返回
+        return lastReturned.item;
+    }
+
+    public boolean hasPrevious() {
+        //判断是否还有前一个元素
+        return nextIndex > 0;
+    }
+
+    //获取前一个元素
+    public E previous() {
+        checkForComodification();
+        //1. 如果没有前一个元素,则抛异常
+        if (!hasPrevious())
+            throw new NoSuchElementException();
+
+        //2. 当next是null的时候,赋值为last     
+        //不是null的时候,往前移动
+        lastReturned = next = (next == null) ? last : next.prev;
+        //3. index-1  因为是往前
+        nextIndex--;
+        //4. 将遍历到的节点数据值返回
+        return lastReturned.item;
+    }
+
+    public int nextIndex() {
+        return nextIndex;
+    }
+
+    public int previousIndex() {
+        return nextIndex - 1;
+    }
+
+    //移除当前遍历到的元素
+    public void remove() {
+        checkForComodification();
+        //1. 移除当前遍历到的元素为null,直接抛错误
+        if (lastReturned == null)
+            throw new IllegalStateException();
+
+        //2. 记录当前节点的下一个节点
+        Node<E> lastNext = lastReturned.next;
+        //3. 删除当前节点
+        unlink(lastReturned);
+        //4. 如果next == lastReturned,说明当前是从前往后遍历的,那么将next赋值为下一个节点
+        //如果不相等,那么说明是从后往前遍历的,这时只需要将index-1就行了
+        if (next == lastReturned)
+            next = lastNext;
+        else
+            nextIndex--;
+        //5. 将移除的节点置空
+        lastReturned = null;
+        expectedModCount++;
+    }
+
+    //设置当前正在遍历的节点的值   啥?用ListIterator居然可以在遍历的时候修改值,,666
+    public void set(E e) {
+        if (lastReturned == null)
+            throw new IllegalStateException();
+        checkForComodification();
+        //设置当前遍历的节点的值
+        lastReturned.item = e;
+    }
+
+    //添加一个值
+    public void add(E e) {
+        checkForComodification();
+        lastReturned = null;
+        //如果next为null,那么添加到最后
+        //否则,将e元素添加到next的前面
+        if (next == null)
+            linkLast(e);
+        else
+            linkBefore(e, next);
+        nextIndex++;
+        expectedModCount++;
+    }
+
+    public void forEachRemaining(Consumer<? super E> action) {
+        Objects.requireNonNull(action);
+        //循环 往后遍历   没遍历一个节点就回调当前节点的数据值
+        while (modCount == expectedModCount && nextIndex < size) {
+            action.accept(next.item);
+            lastReturned = next;
+            next = next.next;
+            nextIndex++;
+        }
+        checkForComodification();
+    }
+
+    //判断一下该列表是否被其他线程改过(在迭代过程中)   修改过则抛异常
+    final void checkForComodification() {
+        if (modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+    }
+}
+```
+
+**这里的ListIterator有点强**
+
+- ListIterator只能用于List及其子类型。
+- 有add()方法,可以往链表中添加对象
+- 可以通过hasNext()和next()往后顺序遍历,也可以通过hasPrevious()和previous()实现往前遍历
+- 可以通过nextIndex()和previousIndex()返回当前索引处的位置
+- 可以通过set()实现当前遍历对象的修改
+
+## 九、总结
+
+好了,又到了总结的时候,相信各位认真看完的应该对链表的基本操作非常熟悉了.
+
+下面我们来总结一下LinkedList的关键点
+
+**LinkedList关键点**
+
+- 底层是双向链表存储数据,并且记录了头节点和尾节点
+- 添加元素非常快,如果是添加到头部和尾部的话更快,因为已经记录了头节点和尾节点,只需要链接一下就行了. 如果是添加到链表的中间部分的话,那么多一步操作,需要先找到添加索引处的元素(因为需要链接到这里),才能进行添加.
+- 遍历的时候,建议采用forEach()进行遍历,这样可以在每次获取下一个元素时都非常轻松(`next = next.next;`).  然后如果是通过`fori`和`get(i)`的方式进行遍历的话,效率是极低的,每次`get(i)`都需要从最前面(或者最后面)开始往后查找i索引处的元素,效率很低.
+- 删除也是非常快,只需要改动一下指针就行了,代价很小.
+
+> 本文有写的不对地方,还请多多包涵,欢迎批评指正.
+
+> 这是我的笔记的其中一篇，需要看其他笔记的请移步 https://github.com/xfhy/notes，欢迎star、fork.
