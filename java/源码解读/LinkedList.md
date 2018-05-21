@@ -1,5 +1,7 @@
 # LinkedList源码欣赏
 
+*本篇文章已授权微信公众号 guolin_blog （郭霖）独家发布
+
 ## 一、概述
 > LinkedList，相对于ArrayList，大家可能平时使用LinkedList要少一些，其实有时候使用LinkedList比ArrayList效率高很多，当然，这得视情况而定。
 
