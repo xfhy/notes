@@ -126,6 +126,15 @@ https://atom.io/
 sudo dpkg -i atom-amd64.deb
 sudo apt-get -f install
 ```
+
+* Variety
+
+壁纸软件，自动切换壁纸
+
+```
+sudo apt-get install variety
+```
+
 * peek 
 
 录屏软件
