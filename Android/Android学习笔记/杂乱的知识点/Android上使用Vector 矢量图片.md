@@ -97,3 +97,19 @@ compile 'com.android.support:support-vector-drawable:25.3.1'
         android:layout_height="match_parent"
         app:srcCompat="@drawable/ic_add"/>
 ```
+
+
+6. 动态修改SVG颜色
+
+```kotlin
+//大于等于API 21 就可以使用VectorDrawable
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	val vectorDrawable = mImg.drawable as VectorDrawable
+	vectorDrawable.setTint(Color.parseColor("#FF4081"))
+} else {
+	//小于API 21则需要用VectorDrawableCompat  才行
+	val vectorDrawableCompat = VectorDrawableCompat.create(resources, R.drawable.ic_beach_access_black_24dp, theme)
+	vectorDrawableCompat?.setTint(Color.parseColor("#FF4081"))
+	mImg.setImageDrawable(vectorDrawableCompat)
+}
+```
