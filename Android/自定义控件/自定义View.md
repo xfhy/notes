@@ -85,3 +85,7 @@ dispatchDraw()方法而不是onDraw()方法，或者自定制一个Drawable，�
 
 记得在前面加一个单位:`TypedValue.COMPLEX_UNIT_SP`
 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+## 6.getDimension() 
+
+获取的是px,系统会自动给我们转成px.
