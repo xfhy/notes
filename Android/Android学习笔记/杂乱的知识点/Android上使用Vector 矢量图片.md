@@ -60,7 +60,30 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 }
+
+//还需要添加依赖
+compile 'com.android.support:support-vector-drawable:25.3.1'
 ```
+
+6. 在Application的onCreate()中加入如下代码,兼容:
+`AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);`
+
+这样一来，我们就可以在5.0以下的设备上使用Vector了。
+
+7. 需要注意的是，如果我们在EditText中使用 android:drawableLeft 和 android:drawableStart 时，有可能还会报错。解决办法。 
+首先将你的svg资源用selector标签包裹起来。 
+例如：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item  android:drawable="@drawable/ic_user"></item>
+
+</selector>
+```
+
+8. 一定要用app:srcCompat才行
 
 直接在ImageView的background中引入该资源即可.
 比如下面的代码:
