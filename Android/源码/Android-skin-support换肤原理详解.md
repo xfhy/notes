@@ -1,7 +1,7 @@
 
 ## 一.背景
 
-> 公司业务上需要用到换肤.为了不重复造轮子,并且快速实现需求,并且求稳,,于是到Github上找了一个star数比较多的换肤框架-`Android-skin-support`.  简单了解之后,可以快速上手,并且侵入性很低.作为一名合格的程序员,当然需要了解其背后的原理才能算是真正的灵活运用.并且有bug的话,也能很快定位是哪里的问题,这对于公司的项目后期维护是非常有用的. 这里只讲原理,具体的使用方式还是去看官方的文档吧,源码地址:https://github.com/ximsfei/Android-skin-support
+> 公司业务上需要用到换肤.为了不重复造轮子,并且快速实现需求,并且求稳,,于是到Github上找了一个star数比较多的换肤框架-`Android-skin-support`(一款用心去做的Android 换肤框架, 极低的学习成本, 极好的用户体验. 一行代码就可以实现换肤, 你值得拥有!!!).  简单了解之后,可以快速上手,并且侵入性很低.作为一名合格的程序员,当然需要了解其背后的原理才能算是真正的灵活运用.并且有bug的话,也能很快定位是哪里的问题,这对于公司的项目后期维护是非常有用的. 这里只讲原理,具体的使用方式还是去看官方的文档吧,源码地址:https://github.com/ximsfei/Android-skin-support
 
 ## 二.AppCompatActivity实现
 
@@ -695,21 +695,13 @@ AppCompatBackgroundHelper和AppCompatTextHelper拿到了xml中定义的属性的
 
 请各位看官放下手中的砖头,且听贫道细细道来.
 
-## 四.换肤原理
+## 四.换肤原理详细解析
 
 ### 1.上文预备知识与换肤的关系
 
 源码中可以通过拦截View创建过程, 替换一些基础的组件(比如`TextView -> AppCompatTextView`), 然后对一些特殊的属性(比如:background, textColor) 做处理, 那我们为什么不能将这种思想拿到换肤框架中来使用呢?我擦,一语惊醒梦中人啊,老哥.我们也可以搞一个委托啊,我们也可以搞一个类似于AppCompatViewInflater的控件加载器啊,我们也可以设置mFactory2啊,相当于创建View的过程由我们接手.既然我们接手了,那岂不是对所有控件都可以为所欲为????那是当然啦.  既然都可以为所欲为了,那换个肤算什么,so easy.
 
-### 2.先简单讲一下原理(本文精髓)
-
-1. 监听APP所有Activity的生命周期(registerActivityLifecycleCallbacks())
-2. 在每个Activity的onCreate()方法调用时setFactory(),设置创建View的工厂.将创建View的琐事交给SkinCompatViewInflater去处理.
-3. 库中自己重写了系统的控件(比如View对应于库中的SkinCompatView),实现换肤接口(接口里面只有一个applySkin()方法),表示该控件是支持换肤的.并且将这些控件在创建之后收集起来,方便随时换肤.
-4. 在库中自己写的控件里面去解析出一些特殊的属性(比如:background, textColor),并将其保存起来
-5. 在切换皮肤的时候,遍历一次之前缓存的View,调用其实现的接口方法applySkin(),在applySkin()中从皮肤资源(可以是从网络或者本地获取皮肤包)中获取资源.获取资源后设置其控件的background或textColor等,就可实现换肤.
-
-### 3.源码一，创建控件全过程
+### 2.源码一，创建控件全过程
 
 ```java
 SkinCompatManager.withoutActivity(application)
@@ -1047,7 +1039,7 @@ public class SkinCompatTextView extends AppCompatTextView implements SkinCompatS
 ```
 还是那套经典的操作，将background相关的属性交给SkinCompatBackgroundHelper去处理，将textColor相关的操作交给SkinCompatTextHelper去处理。与源码中一模一样。
 
-### 4. 源码二，从皮肤包加载皮肤
+### 3. 源码二，从皮肤包加载皮肤
 
 > 其实皮肤包就是一个apk,只不过里面没有任何代码,只有一些需要换肤的资源或者颜色什么的.而且这些资源的名称必须和当前app中的资源名称是一致的,才能替换. 需要什么皮肤资源,直接去皮肤包里面去拿就好了.
 
@@ -1152,15 +1144,147 @@ public Resources getSkinResources(String skinPkgPath) {
 `SkinCompatResources.getInstance().setupSkin()`方法中就是将这些从皮肤包中加载的Resources,包名,皮肤名,加载策略全部存下来.有了这些东西,待会儿就能取皮肤包里面的资源了.
 
 
-库中定义的控件都是实现了SkinCompatSupportable接口的，方便控制换肤。比如SkinCompatTextView的applySkin（）方法中调用了TextHelper的`applySkin()`方法，就是说换肤时会去动态的更换文字颜色什么的。我们来看看实现
+库中定义的控件都是实现了SkinCompatSupportable接口的，方便控制换肤。比如SkinCompatTextView的applySkin（）方法中调用了BackgroundTintHelper和TextHelper的`applySkin()`方法，就是说换肤时会去动态的更换背景或文字颜色什么的。我们来看看` mBackgroundTintHelper.applySkin()`的实现
 
 ```java
-//SkinCompatTextView.java
+//SkinCompatBackgroundHelper.java
 @Override
 public void applySkin() {
-    applyCompoundDrawablesRelativeResource();
-    applyTextColorResource();
-    applyTextColorHintResource();
+    //该控件是否有背景  检测
+    mBackgroundResId = checkResourceId(mBackgroundResId);
+    if (mBackgroundResId == INVALID_ID) {
+        return;
+    }
+    Drawable drawable = SkinCompatVectorResources.getDrawableCompat(mView.getContext(), mBackgroundResId);
+    if (drawable != null) {
+        int paddingLeft = mView.getPaddingLeft();
+        int paddingTop = mView.getPaddingTop();
+        int paddingRight = mView.getPaddingRight();
+        int paddingBottom = mView.getPaddingBottom();
+        ViewCompat.setBackground(mView, drawable);
+        mView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+    }
 }
 
 ```
+就是获取drawable然后给view设置背景嘛.关键在于这里的获取drawable是怎么实现的.来看看具体实现
+
+```java
+//SkinCompatVectorResources.java
+private Drawable getSkinDrawableCompat(Context context, int resId) {
+    //当前是非默认皮肤
+    if (!SkinCompatResources.getInstance().isDefaultSkin()) {
+        try {
+            return SkinCompatDrawableManager.get().getDrawable(context, resId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    ......
+    return AppCompatResources.getDrawable(context, resId);
+}
+
+//SkinCompatDrawableManager.java
+public Drawable getDrawable(@NonNull Context context, @DrawableRes int resId) {
+    return getDrawable(context, resId, false);
+}
+
+Drawable getDrawable(@NonNull Context context, @DrawableRes int resId,
+                        boolean failIfNotKnown) {
+    //检查Drawable是否能被正确解码
+    checkVectorDrawableSetup(context);
+
+    Drawable drawable = loadDrawableFromDelegates(context, resId);
+    if (drawable == null) {
+        drawable = createDrawableIfNeeded(context, resId);
+    }
+    if (drawable == null) {
+        //这里是关键
+        drawable = SkinCompatResources.getDrawable(context, resId);
+    }
+
+    if (drawable != null) {
+        // Tint it if needed
+        drawable = tintDrawable(context, resId, failIfNotKnown, drawable);
+    }
+    if (drawable != null) {
+        // See if we need to 'fix' the drawable
+        SkinCompatDrawableUtils.fixDrawable(drawable);
+    }
+    return drawable;
+}
+
+```
+最后是调用的SkinCompatDrawableManager去获取drawable,我发现这个SkinCompatDrawableManager和系统的AppCompatDrawableManager一模一样.
+唯一不同点是上面的31行处`drawable = SkinCompatResources.getDrawable(context, resId);`,在这里我们去创建drawable时就使用SkinCompatResources去获取.
+
+还记得SkinCompatResources么?就是上面我们获取了皮肤包的信息后,将信息全部保存到了这个类里面.
+
+```java
+//SkinCompatResources.java
+//皮肤的Resources可以通过它来获取皮肤里面的资源
+private Resources mResources;
+//皮肤包名
+private String mSkinPkgName = "";
+//皮肤名
+private String mSkinName = "";
+//加载策略
+private SkinCompatManager.SkinLoaderStrategy mStrategy;
+//是默认皮肤?
+private boolean isDefaultSkin = true;
+
+public static Drawable getDrawable(Context context, int resId) {
+    return getInstance().getSkinDrawable(context, resId);
+}
+/**
+* 通过id获取皮肤中的drawable资源
+* @param context Context
+* @param resId   资源id
+*/
+private Drawable getSkinDrawable(Context context, int resId) {
+    //是否有皮肤颜色缓存
+    if (!SkinCompatUserThemeManager.get().isColorEmpty()) {
+        ColorStateList colorStateList = SkinCompatUserThemeManager.get().getColorStateList(resId);
+        if (colorStateList != null) {
+            return new ColorDrawable(colorStateList.getDefaultColor());
+        }
+    }
+    //是否有皮肤drawable缓存
+    if (!SkinCompatUserThemeManager.get().isDrawableEmpty()) {
+        Drawable drawable = SkinCompatUserThemeManager.get().getDrawable(resId);
+        if (drawable != null) {
+            return drawable;
+        }
+    }
+    //加载策略非空  可以通过加载策略去加载drawable,开发者可自定义
+    if (mStrategy != null) {
+        Drawable drawable = mStrategy.getDrawable(context, mSkinName, resId);
+        if (drawable != null) {
+            return drawable;
+        }
+    }
+    //非默认皮肤 去皮肤中加载资源
+    if (!isDefaultSkin) {
+        //皮肤资源id   这是我们的目标
+        int targetResId = getTargetResId(context, resId);
+        if (targetResId != 0) {
+            //根据id通过皮肤的Resources去获取drawable
+            return mResources.getDrawable(targetResId);
+        }
+    }
+    return context.getResources().getDrawable(resId);
+}
+```
+大概意思就是有缓存资源(之前在皮肤包中取过这个resId的资源)则取缓存资源,没有缓存则根据resId通过皮肤的Resources去获取drawable.
+
+到此,已经获取到皮肤包中的drawable,也就是实现了动态的加载皮肤包中的图片,shape等等的资源,加载皮肤中的颜色的过程也是类似的,这里就不多介绍了.终于,我们完成了换肤大业.
+
+### 4.简单总结一下原理(本文精髓)
+
+1. 监听APP所有Activity的生命周期(registerActivityLifecycleCallbacks())
+2. 在每个Activity的onCreate()方法调用时setFactory(),设置创建View的工厂.将创建View的琐事交给SkinCompatViewInflater去处理.
+3. 库中自己重写了系统的控件(比如View对应于库中的SkinCompatView),实现换肤接口(接口里面只有一个applySkin()方法),表示该控件是支持换肤的.并且将这些控件在创建之后收集起来,方便随时换肤.
+4. 在库中自己写的控件里面去解析出一些特殊的属性(比如:background, textColor),并将其保存起来
+5. 在切换皮肤的时候,遍历一次之前缓存的View,调用其实现的接口方法applySkin(),在applySkin()中从皮肤资源(可以是从网络或者本地获取皮肤包)中获取资源.获取资源后设置其控件的background或textColor等,就可实现换肤.
+
+感谢开源,感谢作者.项目地址:https://github.com/ximsfei/Android-skin-support
