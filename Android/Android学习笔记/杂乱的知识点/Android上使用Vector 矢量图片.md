@@ -1,7 +1,6 @@
 
 Vector Drawable相对于普通的Drawable来说，有以下几个好处：
 
-
 - Vector图像可以自动进行适配，不需要通过分辨率来设置不同的图片
 - Vector图像可以大幅减少图像的体积，同样一张图，用Vector来实现，可能只有PNG的几十分之一
 - 使用简单，很多设计工具，都可以直接导出SVG图像，从而转换成Vector图像
@@ -10,7 +9,7 @@ Vector Drawable相对于普通的Drawable来说，有以下几个好处：
 
 Vector图像刚发布的时候，是只支持Android 5.0+的，对于Android pre-L的系统来说，并不能使用，所以，可以说那时候的Vector并没有什么卵用。不过自从AppCompat 23.2之后，Google对p-View的Android系统也进行了兼容，也就是说，Vector可以使用于Android 2.1以上的所有系统，只需要引用com.android.support:appcompat-v7:23.2.0以上的版本就可以了，这时候，Vector应该算是迎来了它的春天。
 
-## 获取Vector图像
+## 一.获取Vector图像
 
 1. 阿里巴巴矢量图标库: http://www.iconfont.cn/
 
@@ -83,7 +82,7 @@ compile 'com.android.support:support-vector-drawable:25.3.1'
 </selector>
 ```
 
-8. 一定要用app:srcCompat才行
+8. ImageView一定要用app:srcCompat才行
 
 直接在ImageView的background中引入该资源即可.
 比如下面的代码:
@@ -98,18 +97,34 @@ compile 'com.android.support:support-vector-drawable:25.3.1'
         app:srcCompat="@drawable/ic_add"/>
 ```
 
+## 创建SVG的drawable
 
-6. 动态修改SVG颜色
+下面这种方式可以兼容5.0以下
 
-```kotlin
-//大于等于API 21 就可以使用VectorDrawable
+```java
+Drawable drawable = null;
+try {
+    drawable = AppCompatResources.getDrawable(getContext(), mSVGResourceId);
+} catch (Exception e) {
+    e.printStackTrace();
+}
+```
+
+
+## 动态修改SVG颜色
+
+```java
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-	val vectorDrawable = mImg.drawable as VectorDrawable
-	vectorDrawable.setTint(Color.parseColor("#FF4081"))
+    if (drawable != null && drawable instanceof VectorDrawable) {
+        VectorDrawable vectorDrawable = (VectorDrawable) drawable;
+        vectorDrawable.setTint(SkinManager.getColorArgbByContext(getContext(), mSVGColorResId));
+        setImageDrawable(vectorDrawable);
+    }
 } else {
-	//小于API 21则需要用VectorDrawableCompat  才行
-	val vectorDrawableCompat = VectorDrawableCompat.create(resources, R.drawable.ic_beach_access_black_24dp, theme)
-	vectorDrawableCompat?.setTint(Color.parseColor("#FF4081"))
-	mImg.setImageDrawable(vectorDrawableCompat)
+    if (drawable != null && drawable instanceof VectorDrawableCompat) {
+        VectorDrawableCompat vectorDrawableCompat = (VectorDrawableCompat) drawable;
+        vectorDrawableCompat.setTint(SkinManager.getColorArgbByContext(getContext(), mSVGColorResId));
+        setImageDrawable(vectorDrawableCompat);
+    }
 }
 ```
