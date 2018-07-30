@@ -119,6 +119,11 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         VectorDrawable vectorDrawable = (VectorDrawable) drawable;
         vectorDrawable.setTint(SkinManager.getColorArgbByContext(getContext(), mSVGColorResId));
         setImageDrawable(vectorDrawable);
+    } else if (drawable != null && drawable instanceof VectorDrawableCompat) {
+		//为什么5.0以上还会有VectorDrawableCompat?   OPPO这个毒瘤存在兼容性问题
+		VectorDrawableCompat vectorDrawableCompat = (VectorDrawableCompat) drawable;
+		vectorDrawableCompat.setTint(SkinManager.getColorArgbByContext(getContext(), mSVGColorResId));
+		setImageDrawable(vectorDrawableCompat);
     }
 } else {
     if (drawable != null && drawable instanceof VectorDrawableCompat) {
