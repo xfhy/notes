@@ -1,5 +1,9 @@
 # Notes
 
+![image](https://img.shields.io/badge/license-Apache2.0-blue.svg)
+[![image](https://img.shields.io/badge/author-xfhy-orange.svg)](https://github.com/xfhy)
+[![image](https://img.shields.io/badge/CSDN-潇风寒月-orange.svg)](https://blog.csdn.net/xfhy_)
+
 ## 简介
 
 - 平常的一些学习笔记,统一备份到这里.尽量是备份笔记,然后代码备份到其他地方.
