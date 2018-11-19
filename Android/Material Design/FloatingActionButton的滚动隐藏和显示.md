@@ -23,27 +23,27 @@ FloatingActionButton（FAB）其实就是遵循了 `Material Design` 设计规�
 那么，演示动画中的布局为：
 
 ```java
-&lt;android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"&gt;
+    android:layout_height="match_parent">
 
-    &lt;android.support.v7.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/&gt;
+        android:layout_height="match_parent">
 
-    &lt;android.support.design.widget.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_white"
-        app:layout_behavior="com.tianma.recyclerviewsample.fab.FabScrollBehavior"
-        app:elevation="4dp"/&gt;
+        app:layout_behavior="com.xfhy.fab.FabScrollBehavior"
+        app:elevation="4dp">
 
-&lt;/android.support.design.widget.CoordinatorLayout&gt;
+</android.support.design.widget.CoordinatorLayout>
 
 ```
 
