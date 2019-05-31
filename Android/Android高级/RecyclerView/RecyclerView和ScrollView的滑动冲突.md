@@ -1,0 +1,4 @@
+
+
+1. 不用NestedScrollView，只要设RecyclerView.setNestedScrollingEnable()也是能解决问题的
+2. NestedScrollView，用他替代ScrollView，并且不用自定义RecyclerView等列表控件来解决滑动冲突。因为他的内部已经帮我们解决了子View的滑动冲突。 NestedScrollView在多种滑动情景下处理的很好，比如同时有横向和竖向的滑动的时候。
