@@ -1,3 +1,5 @@
+
+
 # Notes
 
 ![image](https://img.shields.io/badge/license-Apache2.0-blue.svg)
@@ -16,7 +18,7 @@
 
 - 数据结构
 	- [代码](https://github.com/xfhy/dataStructure)
-	- [笔记]( https://github.com/xfhy/notes/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+	- [笔记](https://github.com/xfhy/notes/tree/master/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
 - 算法
 	- [代码](https://github.com/xfhy/Algorithm-basis)
 	- [笔记](https://github.com/xfhy/notes/tree/master/%E7%AE%97%E6%B3%95)
